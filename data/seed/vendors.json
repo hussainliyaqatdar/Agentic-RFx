@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "vendor_a_apex",
+    "name": "Apex Packaging Solutions",
+    "contact_email": "sales@apexpack.example",
+    "persona_notes": "Compliant happy-path vendor. Fills the buyer's own Excel template exactly; questionnaire answered separately as a clean Word doc."
+  },
+  {
+    "slug": "vendor_b_shreeji",
+    "name": "Shreeji Corrugators",
+    "contact_email": "quotes@shreejicorr.example",
+    "persona_notes": "Sends their own differently-structured Excel (own codes, own column order, GST column). Questionnaire answered in prose inside the covering email."
+  },
+  {
+    "slug": "vendor_c_globalcorrfab",
+    "name": "Global Corrfab Ltd.",
+    "contact_email": "export@globalcorrfab.example",
+    "persona_notes": "Export-oriented. Formal letterhead PDF quoted in USD with an 8% volume discount buried in a footnote and the questionnaire embedded at the end; freight/payment terms only exist in a separate follow-up email."
+  },
+  {
+    "slug": "vendor_d_suretypack",
+    "name": "Suretypack Industries",
+    "contact_email": "info@suretypack.example",
+    "persona_notes": "Smaller regional vendor. One Word doc holds both the quote (prose-heavy, prices embedded in paragraphs) and the questionnaire (2 questions left unanswered). Quotes 27/30 lines and prices two SKUs per 100 pieces instead of per box. Not ISO certified."
+  },
+  {
+    "slug": "vendor_e_balaji",
+    "name": "Balaji Package Traders",
+    "contact_email": "balajipkg@example.com",
+    "persona_notes": "Very informal trader. An earlier photo of a printed rate card (angled) is superseded by a terser follow-up email with blanket per-kg rates plus 'rest same as last year'. Only 3 of 8 questionnaire questions answered, tersely, in the same email. Doesn't cover specialty SKUs at all."
+  }
+]

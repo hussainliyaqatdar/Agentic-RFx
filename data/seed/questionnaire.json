@@ -1,0 +1,47 @@
+[
+  {
+    "question_no": 1,
+    "question_type": "yes_no",
+    "question_text": "Are you ISO 9001:2015 certified for quality management?"
+  },
+  {
+    "question_no": 2,
+    "question_type": "yes_no",
+    "question_text": "Do you hold FSC or PEFC chain-of-custody certification for board sourcing?"
+  },
+  {
+    "question_no": 3,
+    "question_type": "number",
+    "question_text": "What is your average manufacturing defect/reject rate, as a percentage of units produced?"
+  },
+  {
+    "question_no": 4,
+    "question_type": "choice",
+    "question_text": "Do you edge-crush-test (ECT) or burst-strength-test every production batch, only sample batches, or not at all?",
+    "choices": [
+      "every_batch",
+      "sample_batches",
+      "not_tested"
+    ]
+  },
+  {
+    "question_no": 5,
+    "question_type": "number",
+    "question_text": "What percentage of recycled fibre content is used in your board?"
+  },
+  {
+    "question_no": 6,
+    "question_type": "yes_no",
+    "question_text": "Have you passed an Amazon Packaging Certification (APASS) or equivalent retailer packaging audit in the last 24 months?"
+  },
+  {
+    "question_no": 7,
+    "question_type": "number",
+    "question_text": "What is your standard lead time, in days, for a repeat order of this size?"
+  },
+  {
+    "question_no": 8,
+    "question_type": "yes_no",
+    "question_text": "Do you provide a certificate of conformance with each shipment?"
+  }
+]

@@ -1,0 +1,1476 @@
+{
+  "vendor_a_apex": {
+    "vendor_name": "Apex Packaging Solutions",
+    "line_count_quoted": 30,
+    "lines": [
+      {
+        "sku_code": "PKG-101",
+        "vendor_description": "3-ply RSC box, B-flute, 200x150x100mm, plain kraft",
+        "quantity": 5000,
+        "unit": "box",
+        "unit_price": 14.7,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-102",
+        "vendor_description": "3-ply RSC box, B-flute, 300x200x150mm, plain kraft",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 21.4,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-103",
+        "vendor_description": "3-ply RSC box, B-flute, 400x300x200mm, plain kraft",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 33.6,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-104",
+        "vendor_description": "3-ply RSC box, C-flute, 300x250x200mm, plain kraft",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 32.5,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-105",
+        "vendor_description": "3-ply RSC box, C-flute, 450x350x250mm, plain kraft",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 49.0,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-106",
+        "vendor_description": "5-ply RSC box, BC-flute, 400x300x300mm, plain kraft",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 59.0,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-107",
+        "vendor_description": "5-ply RSC box, BC-flute, 500x400x350mm, plain kraft",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 78.5,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-108",
+        "vendor_description": "5-ply RSC box, BC-flute, 600x450x400mm, plain kraft",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 95.7,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-109",
+        "vendor_description": "5-ply RSC box, BC-flute, 350x350x350mm cube, plain kraft",
+        "quantity": 1800,
+        "unit": "box",
+        "unit_price": 62.0,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-110",
+        "vendor_description": "3-ply RSC box, B-flute, 250x200x150mm, 1-colour print",
+        "quantity": 3500,
+        "unit": "box",
+        "unit_price": 25.3,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-111",
+        "vendor_description": "3-ply RSC box, B-flute, 350x250x200mm, 1-colour print",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 38.4,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-112",
+        "vendor_description": "5-ply RSC box, BC-flute, 450x350x300mm, 2-colour print",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 72.4,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-113",
+        "vendor_description": "5-ply RSC box, BC-flute, 500x500x400mm, 2-colour print",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 89.4,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-114",
+        "vendor_description": "3-ply document/file box, B-flute, 320x260x140mm, plain kraft",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 23.6,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-115",
+        "vendor_description": "3-ply mailer box, B-flute, 300x230x100mm, plain kraft",
+        "quantity": 6000,
+        "unit": "box",
+        "unit_price": 19.8,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-116",
+        "vendor_description": "5-ply heavy carton, BC-flute, 550x400x350mm, plain kraft",
+        "quantity": 1200,
+        "unit": "box",
+        "unit_price": 105.9,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-117",
+        "vendor_description": "5-ply heavy carton, BC-flute, 600x500x450mm, plain kraft",
+        "quantity": 1000,
+        "unit": "box",
+        "unit_price": 126.1,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-118",
+        "vendor_description": "3-ply small parts box, B-flute, 150x100x100mm, plain kraft",
+        "quantity": 8000,
+        "unit": "box",
+        "unit_price": 9.6,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-119",
+        "vendor_description": "3-ply small parts box, B-flute, 200x150x150mm, plain kraft",
+        "quantity": 7000,
+        "unit": "box",
+        "unit_price": 13.3,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-120",
+        "vendor_description": "5-ply bulk carton, BC-flute, 650x450x400mm, plain kraft",
+        "quantity": 900,
+        "unit": "box",
+        "unit_price": 133.9,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-121",
+        "vendor_description": "3-ply flat-pack die-cut sheet, B-flute, 400x300mm",
+        "quantity": 5000,
+        "unit": "sheet",
+        "unit_price": 16.4,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-122",
+        "vendor_description": "5-ply flat-pack die-cut sheet, BC-flute, 500x400mm",
+        "quantity": 3000,
+        "unit": "sheet",
+        "unit_price": 29.5,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-201",
+        "vendor_description": "E-commerce self-locking mailer box, C-flute, 350x250x100mm, 1-colour brand print, auto-bottom lock",
+        "quantity": 10000,
+        "unit": "box",
+        "unit_price": 31.8,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-202",
+        "vendor_description": "Automated case-erector RSC, 5-ply BC-flute, 500x350x300mm, packline-compatible (+/-1mm glue-flap tolerance)",
+        "quantity": 6000,
+        "unit": "box",
+        "unit_price": 87.3,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-203",
+        "vendor_description": "Retail-ready packaging tray with perforated tear-strip, 3-ply B-flute, 400x300x150mm, printed",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 47.7,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-204",
+        "vendor_description": "Pallet corner boards / edge protectors, 2mm triple-wall, 50x50x1000mm L-profile",
+        "quantity": 2000,
+        "unit": "piece",
+        "unit_price": 37.8,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-205",
+        "vendor_description": "Void-fill dunnage pad, honeycomb corrugated, 300x300x20mm",
+        "quantity": 15000,
+        "unit": "piece",
+        "unit_price": 6.3,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-206",
+        "vendor_description": "Insulated cold-chain box with EPE liner, 5-ply BC-flute, 400x300x300mm",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 141.6,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-207",
+        "vendor_description": "Heavy-duty export carton, 7-ply triple-wall, 600x500x500mm, ECT-48 rated",
+        "quantity": 500,
+        "unit": "box",
+        "unit_price": 329.4,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-208",
+        "vendor_description": "Custom die-cut POS display box, 3-ply B-flute, 500x400x600mm, full-colour litho-laminated print",
+        "quantity": 800,
+        "unit": "box",
+        "unit_price": 212.6,
+        "currency": "INR",
+        "lead_time_days": 12,
+        "notes": null
+      }
+    ],
+    "answers": {
+      "1": "Yes",
+      "2": "Yes (FSC-C123456)",
+      "3": "0.3",
+      "4": "every_batch",
+      "5": "35",
+      "6": "Yes",
+      "7": "12",
+      "8": "Yes"
+    }
+  },
+  "vendor_b_shreeji": {
+    "vendor_name": "Shreeji Corrugators",
+    "line_count_quoted": 30,
+    "lines": [
+      {
+        "sku_code": "PKG-101",
+        "vendor_code": "SJ-001",
+        "vendor_description": "3Ply Plain Carton 200x150x100mm",
+        "quantity": 5000,
+        "unit": "box",
+        "unit_price": 16.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-102",
+        "vendor_code": "SJ-002",
+        "vendor_description": "3Ply Plain Carton 300x200x150mm",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 24.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-103",
+        "vendor_code": "SJ-003",
+        "vendor_description": "3Ply Plain Carton 400x300x200mm",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 35.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-104",
+        "vendor_code": "SJ-004",
+        "vendor_description": "3Ply Plain Carton 300x250x200mm",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 37.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-105",
+        "vendor_code": "SJ-005",
+        "vendor_description": "3Ply Plain Carton 450x350x250mm",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 47.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-106",
+        "vendor_code": "SJ-006",
+        "vendor_description": "5Ply Plain Carton 400x300x300mm",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 60.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-107",
+        "vendor_code": "SJ-007",
+        "vendor_description": "5Ply Plain Carton 500x400x350mm",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 84.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-108",
+        "vendor_code": "SJ-008",
+        "vendor_description": "5Ply Plain Carton 600x450x400mm",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 103.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-109",
+        "vendor_code": "SJ-009",
+        "vendor_description": "5Ply Plain Carton 350x350x350mm",
+        "quantity": 1800,
+        "unit": "box",
+        "unit_price": 69.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-110",
+        "vendor_code": "SJ-010",
+        "vendor_description": "3Ply Printed Carton 250x200x150mm",
+        "quantity": 3500,
+        "unit": "box",
+        "unit_price": 27.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-111",
+        "vendor_code": "SJ-011",
+        "vendor_description": "3Ply Printed Carton 350x250x200mm",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 42.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-112",
+        "vendor_code": "SJ-012",
+        "vendor_description": "5Ply Printed Carton 450x350x300mm",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 65.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-113",
+        "vendor_code": "SJ-013",
+        "vendor_description": "5Ply Printed Carton 500x500x400mm",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 88.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-114",
+        "vendor_code": "SJ-014",
+        "vendor_description": "3Ply Plain Carton 320x260x140mm",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 23.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-115",
+        "vendor_code": "SJ-015",
+        "vendor_description": "3Ply Plain Carton 300x230x100mm",
+        "quantity": 6000,
+        "unit": "box",
+        "unit_price": 18.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-116",
+        "vendor_code": "SJ-016",
+        "vendor_description": "5Ply Plain Carton 550x400x350mm",
+        "quantity": 1200,
+        "unit": "box",
+        "unit_price": 100.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-117",
+        "vendor_code": "SJ-017",
+        "vendor_description": "5Ply Plain Carton 600x500x450mm",
+        "quantity": 1000,
+        "unit": "box",
+        "unit_price": 118.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-118",
+        "vendor_code": "SJ-018",
+        "vendor_description": "3Ply Plain Carton 150x100x100mm",
+        "quantity": 8000,
+        "unit": "box",
+        "unit_price": 9.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-119",
+        "vendor_code": "SJ-019",
+        "vendor_description": "3Ply Plain Carton 200x150x150mm",
+        "quantity": 7000,
+        "unit": "box",
+        "unit_price": 14.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-120",
+        "vendor_code": "SJ-020",
+        "vendor_description": "5Ply Plain Carton 650x450x400mm",
+        "quantity": 900,
+        "unit": "box",
+        "unit_price": 137.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-121",
+        "vendor_code": "SJ-021",
+        "vendor_description": "3Ply Plain Carton 400x300mm",
+        "quantity": 5000,
+        "unit": "sheet",
+        "unit_price": 16.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-122",
+        "vendor_code": "SJ-022",
+        "vendor_description": "5Ply Plain Carton 500x400mm",
+        "quantity": 3000,
+        "unit": "sheet",
+        "unit_price": 27.5,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": null
+      },
+      {
+        "sku_code": "PKG-201",
+        "vendor_code": "SJ-023",
+        "vendor_description": "3Ply Printed Carton 350x250x100mm",
+        "quantity": 10000,
+        "unit": "box",
+        "unit_price": 31.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-202",
+        "vendor_code": "SJ-024",
+        "vendor_description": "5Ply Plain Carton 500x350x300mm",
+        "quantity": 6000,
+        "unit": "box",
+        "unit_price": 101.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-203",
+        "vendor_code": "SJ-025",
+        "vendor_description": "3Ply Printed Carton 400x300x150mm",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 49.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-204",
+        "vendor_code": "SJ-026",
+        "vendor_description": "3Ply Plain Carton 50x50x1000mm",
+        "quantity": 2000,
+        "unit": "piece",
+        "unit_price": 40.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-205",
+        "vendor_code": "SJ-027",
+        "vendor_description": "1Ply Plain Carton 300x300x20mm",
+        "quantity": 15000,
+        "unit": "piece",
+        "unit_price": 6.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-206",
+        "vendor_code": "SJ-028",
+        "vendor_description": "5Ply Plain Carton 400x300x300mm",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 157.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-207",
+        "vendor_code": "SJ-029",
+        "vendor_description": "7Ply Plain Carton 600x500x500mm",
+        "quantity": 500,
+        "unit": "box",
+        "unit_price": 301.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      },
+      {
+        "sku_code": "PKG-208",
+        "vendor_code": "SJ-030",
+        "vendor_description": "3Ply Printed Carton 500x400x600mm",
+        "quantity": 800,
+        "unit": "box",
+        "unit_price": 209.0,
+        "currency": "INR",
+        "gst_percent": 18,
+        "lead_time_days": 18,
+        "notes": "Subject to board availability, please confirm before order"
+      }
+    ],
+    "answers": {
+      "1": "Yes",
+      "2": "No",
+      "3": "1.2",
+      "4": "sample_batches",
+      "5": "20",
+      "6": "No",
+      "7": "18",
+      "8": "Yes"
+    }
+  },
+  "vendor_c_globalcorrfab": {
+    "vendor_name": "Global Corrfab Ltd.",
+    "line_count_quoted": 30,
+    "lines": [
+      {
+        "sku_code": "PKG-101",
+        "vendor_description": "3-ply RSC box, B-flute, 200x150x100mm, plain kraft",
+        "quantity": 5000,
+        "unit": "box",
+        "list_unit_price": 0.21,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-102",
+        "vendor_description": "3-ply RSC box, B-flute, 300x200x150mm, plain kraft",
+        "quantity": 4000,
+        "unit": "box",
+        "list_unit_price": 0.3,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-103",
+        "vendor_description": "3-ply RSC box, B-flute, 400x300x200mm, plain kraft",
+        "quantity": 3000,
+        "unit": "box",
+        "list_unit_price": 0.46,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-104",
+        "vendor_description": "3-ply RSC box, C-flute, 300x250x200mm, plain kraft",
+        "quantity": 3000,
+        "unit": "box",
+        "list_unit_price": 0.46,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-105",
+        "vendor_description": "3-ply RSC box, C-flute, 450x350x250mm, plain kraft",
+        "quantity": 2000,
+        "unit": "box",
+        "list_unit_price": 0.68,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-106",
+        "vendor_description": "5-ply RSC box, BC-flute, 400x300x300mm, plain kraft",
+        "quantity": 2500,
+        "unit": "box",
+        "list_unit_price": 0.81,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-107",
+        "vendor_description": "5-ply RSC box, BC-flute, 500x400x350mm, plain kraft",
+        "quantity": 2000,
+        "unit": "box",
+        "list_unit_price": 0.99,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-108",
+        "vendor_description": "5-ply RSC box, BC-flute, 600x450x400mm, plain kraft",
+        "quantity": 1500,
+        "unit": "box",
+        "list_unit_price": 1.24,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-109",
+        "vendor_description": "5-ply RSC box, BC-flute, 350x350x350mm cube, plain kraft",
+        "quantity": 1800,
+        "unit": "box",
+        "list_unit_price": 0.81,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-110",
+        "vendor_description": "3-ply RSC box, B-flute, 250x200x150mm, 1-colour print",
+        "quantity": 3500,
+        "unit": "box",
+        "list_unit_price": 0.34,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-111",
+        "vendor_description": "3-ply RSC box, B-flute, 350x250x200mm, 1-colour print",
+        "quantity": 2500,
+        "unit": "box",
+        "list_unit_price": 0.51,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-112",
+        "vendor_description": "5-ply RSC box, BC-flute, 450x350x300mm, 2-colour print",
+        "quantity": 2000,
+        "unit": "box",
+        "list_unit_price": 1.03,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-113",
+        "vendor_description": "5-ply RSC box, BC-flute, 500x500x400mm, 2-colour print",
+        "quantity": 1500,
+        "unit": "box",
+        "list_unit_price": 1.3,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-114",
+        "vendor_description": "3-ply document/file box, B-flute, 320x260x140mm, plain kraft",
+        "quantity": 4000,
+        "unit": "box",
+        "list_unit_price": 0.32,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-115",
+        "vendor_description": "3-ply mailer box, B-flute, 300x230x100mm, plain kraft",
+        "quantity": 6000,
+        "unit": "box",
+        "list_unit_price": 0.27,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-116",
+        "vendor_description": "5-ply heavy carton, BC-flute, 550x400x350mm, plain kraft",
+        "quantity": 1200,
+        "unit": "box",
+        "list_unit_price": 1.39,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-117",
+        "vendor_description": "5-ply heavy carton, BC-flute, 600x500x450mm, plain kraft",
+        "quantity": 1000,
+        "unit": "box",
+        "list_unit_price": 1.82,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-118",
+        "vendor_description": "3-ply small parts box, B-flute, 150x100x100mm, plain kraft",
+        "quantity": 8000,
+        "unit": "box",
+        "list_unit_price": 0.13,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-119",
+        "vendor_description": "3-ply small parts box, B-flute, 200x150x150mm, plain kraft",
+        "quantity": 7000,
+        "unit": "box",
+        "list_unit_price": 0.17,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-120",
+        "vendor_description": "5-ply bulk carton, BC-flute, 650x450x400mm, plain kraft",
+        "quantity": 900,
+        "unit": "box",
+        "list_unit_price": 1.8,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-121",
+        "vendor_description": "3-ply flat-pack die-cut sheet, B-flute, 400x300mm",
+        "quantity": 5000,
+        "unit": "sheet",
+        "list_unit_price": 0.22,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-122",
+        "vendor_description": "5-ply flat-pack die-cut sheet, BC-flute, 500x400mm",
+        "quantity": 3000,
+        "unit": "sheet",
+        "list_unit_price": 0.38,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-201",
+        "vendor_description": "E-commerce self-locking mailer box, C-flute, 350x250x100mm, 1-colour brand print, auto-bottom lock",
+        "quantity": 10000,
+        "unit": "box",
+        "list_unit_price": 0.44,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-202",
+        "vendor_description": "Automated case-erector RSC, 5-ply BC-flute, 500x350x300mm, packline-compatible (+/-1mm glue-flap tolerance)",
+        "quantity": 6000,
+        "unit": "box",
+        "list_unit_price": 1.26,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-203",
+        "vendor_description": "Retail-ready packaging tray with perforated tear-strip, 3-ply B-flute, 400x300x150mm, printed",
+        "quantity": 4000,
+        "unit": "box",
+        "list_unit_price": 0.61,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-204",
+        "vendor_description": "Pallet corner boards / edge protectors, 2mm triple-wall, 50x50x1000mm L-profile",
+        "quantity": 2000,
+        "unit": "piece",
+        "list_unit_price": 0.49,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-205",
+        "vendor_description": "Void-fill dunnage pad, honeycomb corrugated, 300x300x20mm",
+        "quantity": 15000,
+        "unit": "piece",
+        "list_unit_price": 0.09,
+        "currency": "USD",
+        "discount_applies": true,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-206",
+        "vendor_description": "Insulated cold-chain box with EPE liner, 5-ply BC-flute, 400x300x300mm",
+        "quantity": 1500,
+        "unit": "box",
+        "list_unit_price": 1.96,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-207",
+        "vendor_description": "Heavy-duty export carton, 7-ply triple-wall, 600x500x500mm, ECT-48 rated",
+        "quantity": 500,
+        "unit": "box",
+        "list_unit_price": 4.08,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      },
+      {
+        "sku_code": "PKG-208",
+        "vendor_description": "Custom die-cut POS display box, 3-ply B-flute, 500x400x600mm, full-colour litho-laminated print",
+        "quantity": 800,
+        "unit": "box",
+        "list_unit_price": 2.66,
+        "currency": "USD",
+        "discount_applies": false,
+        "discount_percent": 8
+      }
+    ],
+    "answers": {
+      "1": "Yes",
+      "2": "Yes (FSC and PEFC)",
+      "3": "0.25",
+      "4": "every_batch",
+      "5": "40",
+      "6": "Yes",
+      "7": "21",
+      "8": "Yes"
+    }
+  },
+  "vendor_d_suretypack": {
+    "vendor_name": "Suretypack Industries",
+    "line_count_quoted": 27,
+    "lines": [
+      {
+        "sku_code": "PKG-101",
+        "vendor_description": "3-ply RSC box, B-flute, 200x150x100mm, plain kraft",
+        "quantity": 5000,
+        "unit": "box",
+        "unit_price": 12.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-102",
+        "vendor_description": "3-ply RSC box, B-flute, 300x200x150mm, plain kraft",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 20.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-103",
+        "vendor_description": "3-ply RSC box, B-flute, 400x300x200mm, plain kraft",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 32.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-104",
+        "vendor_description": "3-ply RSC box, C-flute, 300x250x200mm, plain kraft",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 30.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-105",
+        "vendor_description": "3-ply RSC box, C-flute, 450x350x250mm, plain kraft",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 41.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-106",
+        "vendor_description": "5-ply RSC box, BC-flute, 400x300x300mm, plain kraft",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 52.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-107",
+        "vendor_description": "5-ply RSC box, BC-flute, 500x400x350mm, plain kraft",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 74.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-108",
+        "vendor_description": "5-ply RSC box, BC-flute, 600x450x400mm, plain kraft",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 90.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-109",
+        "vendor_description": "5-ply RSC box, BC-flute, 350x350x350mm cube, plain kraft",
+        "quantity": 1800,
+        "unit": "box",
+        "unit_price": 60.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-110",
+        "vendor_description": "3-ply RSC box, B-flute, 250x200x150mm, 1-colour print",
+        "quantity": 3500,
+        "unit": "box",
+        "unit_price": 25.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-111",
+        "vendor_description": "3-ply RSC box, B-flute, 350x250x200mm, 1-colour print",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 33.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-112",
+        "vendor_description": "5-ply RSC box, BC-flute, 450x350x300mm, 2-colour print",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 68.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-113",
+        "vendor_description": "5-ply RSC box, BC-flute, 500x500x400mm, 2-colour print",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 86.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-114",
+        "vendor_description": "3-ply document/file box, B-flute, 320x260x140mm, plain kraft",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 22.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-115",
+        "vendor_description": "3-ply mailer box, B-flute, 300x230x100mm, plain kraft",
+        "quantity": 6000,
+        "unit": "box",
+        "unit_price": 17.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-116",
+        "vendor_description": "5-ply heavy carton, BC-flute, 550x400x350mm, plain kraft",
+        "quantity": 1200,
+        "unit": "box",
+        "unit_price": 98.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-117",
+        "vendor_description": "5-ply heavy carton, BC-flute, 600x500x450mm, plain kraft",
+        "quantity": 1000,
+        "unit": "box",
+        "unit_price": 110.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-118",
+        "vendor_description": "3-ply small parts box, B-flute, 150x100x100mm, plain kraft",
+        "quantity": 8000,
+        "unit": "100 pieces",
+        "unit_price": 824.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-119",
+        "vendor_description": "3-ply small parts box, B-flute, 200x150x150mm, plain kraft",
+        "quantity": 7000,
+        "unit": "100 pieces",
+        "unit_price": 1164.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-120",
+        "vendor_description": "5-ply bulk carton, BC-flute, 650x450x400mm, plain kraft",
+        "quantity": 900,
+        "unit": "box",
+        "unit_price": 134.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-121",
+        "vendor_description": "3-ply flat-pack die-cut sheet, B-flute, 400x300mm",
+        "quantity": 5000,
+        "unit": "sheet",
+        "unit_price": 15.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-122",
+        "vendor_description": "5-ply flat-pack die-cut sheet, BC-flute, 500x400mm",
+        "quantity": 3000,
+        "unit": "sheet",
+        "unit_price": 25.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-201",
+        "vendor_description": "E-commerce self-locking mailer box, C-flute, 350x250x100mm, 1-colour brand print, auto-bottom lock",
+        "quantity": 10000,
+        "unit": "box",
+        "unit_price": 29.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-203",
+        "vendor_description": "Retail-ready packaging tray with perforated tear-strip, 3-ply B-flute, 400x300x150mm, printed",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 40.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-205",
+        "vendor_description": "Void-fill dunnage pad, honeycomb corrugated, 300x300x20mm",
+        "quantity": 15000,
+        "unit": "piece",
+        "unit_price": 6.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-207",
+        "vendor_description": "Heavy-duty export carton, 7-ply triple-wall, 600x500x500mm, ECT-48 rated",
+        "quantity": 500,
+        "unit": "box",
+        "unit_price": 308.0,
+        "currency": "INR",
+        "lead_time_days": 15
+      },
+      {
+        "sku_code": "PKG-208",
+        "vendor_description": "Custom die-cut POS display box, 3-ply B-flute, 500x400x600mm, full-colour litho-laminated print",
+        "quantity": 800,
+        "unit": "box",
+        "unit_price": 186.5,
+        "currency": "INR",
+        "lead_time_days": 15
+      }
+    ],
+    "answers": {
+      "1": "No",
+      "2": "No",
+      "4": "sample_batches",
+      "6": "No",
+      "7": "15",
+      "8": "No"
+    }
+  },
+  "vendor_e_balaji": {
+    "vendor_name": "Balaji Package Traders",
+    "line_count_quoted": 22,
+    "lines": [
+      {
+        "sku_code": "PKG-101",
+        "quantity": 5000,
+        "unit": "box",
+        "unit_price": 4.5,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "38.0/kg x 0.12kg"
+      },
+      {
+        "sku_code": "PKG-102",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 8.5,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "38.0/kg x 0.22kg"
+      },
+      {
+        "sku_code": "PKG-103",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 14.5,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "38.0/kg x 0.38kg"
+      },
+      {
+        "sku_code": "PKG-104",
+        "quantity": 3000,
+        "unit": "box",
+        "unit_price": 13.5,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "38.0/kg x 0.36kg"
+      },
+      {
+        "sku_code": "PKG-105",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 21.0,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "38.0/kg x 0.55kg"
+      },
+      {
+        "sku_code": "PKG-106",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 26.0,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "42.0/kg x 0.62kg"
+      },
+      {
+        "sku_code": "PKG-107",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 35.5,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "42.0/kg x 0.85kg"
+      },
+      {
+        "sku_code": "PKG-108",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 46.0,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "42.0/kg x 1.1kg"
+      },
+      {
+        "sku_code": "PKG-109",
+        "quantity": 1800,
+        "unit": "box",
+        "unit_price": 28.5,
+        "currency": "INR",
+        "source": "email_blanket_rate",
+        "note": "42.0/kg x 0.68kg"
+      },
+      {
+        "sku_code": "PKG-110",
+        "quantity": 3500,
+        "unit": "box",
+        "unit_price": 26.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-111",
+        "quantity": 2500,
+        "unit": "box",
+        "unit_price": 39.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-112",
+        "quantity": 2000,
+        "unit": "box",
+        "unit_price": 72.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-113",
+        "quantity": 1500,
+        "unit": "box",
+        "unit_price": 92.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-114",
+        "quantity": 4000,
+        "unit": "box",
+        "unit_price": 24.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-115",
+        "quantity": 6000,
+        "unit": "box",
+        "unit_price": 19.5,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-116",
+        "quantity": 1200,
+        "unit": "box",
+        "unit_price": 105.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-117",
+        "quantity": 1000,
+        "unit": "box",
+        "unit_price": 128.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-118",
+        "quantity": 8000,
+        "unit": "box",
+        "unit_price": 9.5,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-119",
+        "quantity": 7000,
+        "unit": "box",
+        "unit_price": 13.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-120",
+        "quantity": 900,
+        "unit": "box",
+        "unit_price": 138.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-121",
+        "quantity": 5000,
+        "unit": "sheet",
+        "unit_price": 16.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      },
+      {
+        "sku_code": "PKG-122",
+        "quantity": 3000,
+        "unit": "sheet",
+        "unit_price": 29.0,
+        "currency": "INR",
+        "source": "same_as_last_year",
+        "note": "vendor said 'rest same as last year' -> FY2025 reference price"
+      }
+    ],
+    "answers": {
+      "1": "Yes",
+      "7": "7-10 days",
+      "8": "No"
+    }
+  }
+}
