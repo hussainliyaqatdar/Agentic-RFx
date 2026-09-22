@@ -1,0 +1,212 @@
+[
+  {
+    "sku_code": "PKG-101",
+    "unit_price": 14.5,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-102",
+    "unit_price": 22.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-103",
+    "unit_price": 34.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-104",
+    "unit_price": 33.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-105",
+    "unit_price": 48.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-106",
+    "unit_price": 58.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-107",
+    "unit_price": 76.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-108",
+    "unit_price": 98.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-109",
+    "unit_price": 62.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-110",
+    "unit_price": 26.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-111",
+    "unit_price": 39.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-112",
+    "unit_price": 72.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-113",
+    "unit_price": 92.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-114",
+    "unit_price": 24.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-115",
+    "unit_price": 19.5,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-116",
+    "unit_price": 105.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-117",
+    "unit_price": 128.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-118",
+    "unit_price": 9.5,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-119",
+    "unit_price": 13.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-120",
+    "unit_price": 138.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-121",
+    "unit_price": 16.0,
+    "currency": "INR",
+    "unit": "sheet",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-122",
+    "unit_price": 29.0,
+    "currency": "INR",
+    "unit": "sheet",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-201",
+    "unit_price": 32.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-202",
+    "unit_price": 89.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-203",
+    "unit_price": 46.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-204",
+    "unit_price": 38.0,
+    "currency": "INR",
+    "unit": "piece",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-205",
+    "unit_price": 6.5,
+    "currency": "INR",
+    "unit": "piece",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-206",
+    "unit_price": 145.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-207",
+    "unit_price": 320.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  },
+  {
+    "sku_code": "PKG-208",
+    "unit_price": 210.0,
+    "currency": "INR",
+    "unit": "box",
+    "period_label": "FY2025"
+  }
+]
