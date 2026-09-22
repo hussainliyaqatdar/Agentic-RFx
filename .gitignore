@@ -1,0 +1,16 @@
+# Python / backend
+backend/.venv/
+__pycache__/
+*.pyc
+backend/*.db
+backend/storage/*
+!backend/storage/.gitkeep
+
+# Env files - never commit real secrets
+.env
+backend/.env
+frontend/.env
+
+# OS cruft
+.DS_Store
+Thumbs.db
