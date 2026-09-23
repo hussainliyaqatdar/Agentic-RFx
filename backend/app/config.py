@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./agentic_rfx.db"
     storage_dir: str = "./storage"
     seed_data_dir: str = str(_REPO_ROOT / "data" / "seed")
-    cors_origins: str = "http://localhost:5173,https://agentic-rfx.onrender.com"
+    cors_origins: str = "http://localhost:5173,https://agentic-rfx-frontend.onrender.com"
 
     @property
     def cors_origin_list(self) -> list[str]:
