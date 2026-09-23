@@ -7,6 +7,10 @@ cd data/seed
 uv run --project ../../backend python build_seed_data.py
 ```
 
+- `rfx.json` — the buyer's own ask: buyer name (**YoloMart**, fictional), RFx title/category/scope,
+  canonical currency, and YoloMart's own requested payment/delivery terms and quote validity —
+  each vendor's proposed terms in their quote/email are compared against this, not assumed to
+  match it.
 - `line_items.json` — 30 canonical corrugated-packaging SKUs: 22 popular RSC/mailer/document-box
   variants (PKG-101 to PKG-122) plus 8 specialty SKUs (PKG-201 to PKG-208) of the kind an
   Amazon/Walmart-grade packaging supplier carries — e-commerce mailers, packline-compatible
@@ -24,10 +28,16 @@ uv run --project ../../backend python build_seed_data.py
 
 | Vendor | Format(s) | What it tests |
 |---|---|---|
-| `vendor_a_apex` | `quote.xlsx` (buyer's own template, filled correctly) + `questionnaire.docx` | Control / happy path. Passes every quality gate. |
-| `vendor_b_shreeji` | `quote.xlsx` (vendor's own template — own codes, own column order, GST column) + `cover_email.txt` (questionnaire answered in prose) | Entity resolution against a different schema; free-text questionnaire extraction. |
-| `vendor_c_globalcorrfab` | `quote.pdf` (letterhead, USD, discount in a footnote, questionnaire embedded) + `followup_email.txt` (freight/payment/lead-time — absent from the PDF) | Currency conversion, conditional footnote-discount reasoning, reconciling two source documents for one vendor. |
-| `vendor_d_suretypack` | `quote_and_questionnaire.docx` (commercial terms and all pricing in flowing prose, not a table) | Real prose-to-structured extraction. Quotes 27/30 lines (states the 3 it can't supply), prices 2 SKUs per-100-pieces instead of per-box, leaves 2 questionnaire answers blank, fails the ISO gate. |
+| `vendor_a_apex` | `quote.xlsx` (buyer's own template, filled correctly) + `questionnaire.docx` | Control / happy path. Passes every quality gate. Retains YoloMart's own `PKG-xxx` SKU code — an RFx-savvy vendor, so the join key comes for free. |
+| `vendor_b_shreeji` | `quote.xlsx` (vendor's own template — own codes, own column order, GST column) + `cover_email.txt` (questionnaire answered in prose) | Entity resolution against a different schema (own `SJ-xxx` codes, no reference to YoloMart's SKU at all); free-text questionnaire extraction. |
+| `vendor_c_globalcorrfab` | `quote.pdf` (letterhead, USD, discount in a footnote, questionnaire embedded) + `followup_email.txt` (freight/payment/lead-time — absent from the PDF) | Currency conversion, conditional footnote-discount reasoning, reconciling two source documents for one vendor. Also retains YoloMart's SKU code, same reasoning as Apex. |
+| `vendor_d_suretypack` | `quote_and_questionnaire.docx` (commercial terms and all pricing in flowing prose, not a table) | Real prose-to-structured extraction, matched purely on dimensions/spec (no SKU code at all). Quotes 27/30 lines (states the 3 it can't supply), prices 2 SKUs per-100-pieces instead of per-box, leaves 2 questionnaire answers blank, fails the ISO gate. |
 | `vendor_e_balaji` | `rate_card_photo.jpg` (angled photo of a printed rate card, since superseded) + `followup_email.txt` (blanket per-kg rates + "rest same as last year" + 3/8 questionnaire answers) | Vision extraction from an imperfect photo, per-kg-to-per-box conversion via item weight, resolving "same as last year" against `historical_prices.json`, and handling two vendor documents where the later one partially overrides the earlier one. Doesn't quote any specialty SKU at all. |
+
+Only Apex and Global Corrfab echo YoloMart's own SKU code back in their response — that's deliberate,
+not an inconsistency: those two are the RFx-savvy, formally-integrated vendors in this dataset, and
+real vendors of that profile typically do reconcile against the buyer's own item codes. The other
+three are positioned as smaller/less digitized and quote against their own codes or plain
+descriptions instead, which is exactly the entity-resolution problem module 3 has to solve.
 
 Coverage summary (out of 30 line items / 8 questions): A 30/8, B 30/8, C 30/8, D 27/6, E 22/3.
