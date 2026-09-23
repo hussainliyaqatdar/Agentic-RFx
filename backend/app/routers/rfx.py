@@ -256,6 +256,13 @@ def extract_rfx(rfx_id: int, session: Session = Depends(get_session)):
     rfx = session.get(Rfx, rfx_id)
     if not rfx:
         raise HTTPException(status_code=404, detail="RFx not found")
+    already_running = session.exec(
+        select(RfxVendor).where(
+            RfxVendor.rfx_id == rfx_id, RfxVendor.response_status == VendorResponseStatus.EXTRACTING
+        )
+    ).first()
+    if already_running:
+        raise HTTPException(status_code=409, detail="Extraction is already in progress for this RFx")
     try:
         result = run_and_persist_extraction(session, rfx_id)
     except ValueError as exc:
