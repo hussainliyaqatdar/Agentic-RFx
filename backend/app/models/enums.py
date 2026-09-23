@@ -13,6 +13,7 @@ class RfxStatus(str, Enum):
 class VendorResponseStatus(str, Enum):
     PENDING = "pending"
     RECEIVED = "received"
+    EXTRACTING = "extracting"
     EXTRACTED = "extracted"
     ERROR = "error"
 
