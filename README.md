@@ -6,7 +6,7 @@ rate card, plain email text), an extraction/normalization agent lands everything
 side-by-side comparison, and an analyst-chat agent answers natural-language questions grounded in
 that comparison through to an award decision.
 
-Category: corrugated packaging. Five vendors, thirty line items, a questionnaire.
+Fictional buyer: **YoloMart**. Category: corrugated packaging. Five vendors, thirty line items, a questionnaire.
 
 ## Stack
 
@@ -46,13 +46,16 @@ backend/app/
   models/       SQLModel schema - see below
   routers/      FastAPI route modules
   services/
-    llm/        Gemini client wrapper
+    llm/        Gemini client wrapper, retry policy, cost tracking
+    extraction/ Module 3 - document loader, worker agent, evaluator agent, merge
+  evals/        offline harness - runs extraction against the 5 fabricated vendors,
+                scores it against data/seed/vendors/ground_truth.json
   db.py         engine + session + init_db()
   main.py       app entrypoint
 frontend/src/
   pages/        one page per module (list, co-pilot, comparison, chat)
   lib/api.ts    fetch helper
-data/seed/      fabricated dataset (not generated yet - see its README)
+data/seed/      fabricated dataset - see its README
 ```
 
 ## Data model
@@ -75,12 +78,34 @@ Defined in `backend/app/models/`, one table per file grouped by domain:
   analyst chat (`session_type` distinguishes them), with `tool_calls` kept per message so answers
   stay traceable back to the query that produced them.
 
-## Status
+## Module 3: extraction & entity resolution
 
-Scaffolding only, right now: both services boot, the DB schema is fully defined and verified
-against SQLModel's `create_all()`, and the frontend confirms live connectivity to the backend.
-None of the five modules (co-pilot, review workflow, extraction, comparison UX, analyst chat) are
-wired up yet.
+The crux module is implemented and running against real Gemini calls, not stubbed:
+
+- **Worker agent**: one Gemini call per vendor, given that vendor's raw documents (xlsx/pdf/docx/
+  image/email, however many) plus the canonical line items, questionnaire, and buyer terms. Matches
+  by spec rather than assuming vendor codes line up, normalizes units/currency, and cites its
+  source for every value.
+- **Evaluator agent**: a second, independent Gemini call - adversarial framing, same documents,
+  reviews the worker's claims without seeing its reasoning. Re-derives values rather than checking
+  plausibility, and separately checks *completeness*: whether the documents support pricing any
+  canonical item the worker didn't claim at all (e.g. a vendor's blanket rate that was never
+  expanded across the items it covers).
+- **Merge**: deterministic combination of worker + evaluator output into final records, with
+  `needs_review` and the evaluator's reasoning attached - never silently dropped.
+- **Eval harness** (`backend/app/evals/`): runs the pipeline against all 5 fabricated vendors and
+  scores the result against the authored ground truth - SKU-match accuracy, price accuracy,
+  coverage precision, questionnaire accuracy. Run with:
+  ```bash
+  cd backend
+  uv run python -m app.evals.run_evals
+  ```
+  Every Gemini call is cost-tracked from the API's own token usage and hard-capped by
+  `cost_tracker.SESSION_BUDGET_USD` (default $1) - it refuses to make another call once the session
+  spend reaches that cap.
+
+Modules 1, 2, 4, and 5 (co-pilot, review workflow, comparison UX, analyst chat) are not wired up
+yet - only their placeholder pages and schema exist so far.
 
 **Deliberately out of scope for v0**: real email send/receive (fully simulated — vendor responses
 are ingested as manually-attached files, not a live inbox), auth/multi-tenant, live FX rates, and
