@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
+from ._timestamps import utcnow
 from .enums import QuestionType, RfxStatus, VendorResponseStatus
 
 if TYPE_CHECKING:
@@ -21,8 +22,8 @@ class Rfx(SQLModel, table=True):
     payment_terms: Optional[str] = None
     delivery_terms: Optional[str] = None
     validity_days: Optional[int] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utcnow)
+    updated_at: datetime = Field(default_factory=utcnow)
 
     line_items: List["RfxLineItem"] = Relationship(back_populates="rfx")
     questions: List["RfxQuestion"] = Relationship(back_populates="rfx")

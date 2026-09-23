@@ -3,6 +3,8 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
+from ._timestamps import utcnow
+
 
 class AwardLineItem(SQLModel, table=True):
     """The committed award decision, one row per line item so a single RFx
@@ -19,4 +21,4 @@ class AwardLineItem(SQLModel, table=True):
     # Short justification, e.g. drawn from the analyst chat's own reasoning,
     # kept alongside the decision for audit/defensibility.
     rationale: Optional[str] = None
-    awarded_at: datetime = Field(default_factory=datetime.utcnow)
+    awarded_at: datetime = Field(default_factory=utcnow)

@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/* Design tokens grounded in Aerchain's product UI (screenshot reference) -
+   primary blue, teal accent, soft-pastel status tones, neutral grays. */
+@theme {
+  --color-brand-blue: #2563eb;
+  --color-brand-blue-dark: #1d4ed8;
+  --color-brand-teal: #14b8a6;
+  --color-brand-teal-light: #ccfbf1;
+
+  --color-success-text: #15803d;
+  --color-success-bg: #dcfce7;
+  --color-warning-text: #b45309;
+  --color-warning-bg: #fef3c7;
+  --color-danger-text: #dc2626;
+  --color-danger-border: #fca5a5;
+  --color-danger-bg: #fef2f2;
+  --color-info-text: #0369a1;
+  --color-info-bg: #e0f2fe;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
+
+  --color-border-default: #e5e7eb;
+  --color-border-strong: #d1d5db;
+  --color-bg-page: #f9fafb;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f3f4f6;
+}
+
+body {
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+}
