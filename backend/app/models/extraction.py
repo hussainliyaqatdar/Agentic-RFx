@@ -3,6 +3,8 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
+from ._timestamps import utcnow
+
 
 class ExtractedLineQuote(SQLModel, table=True):
     """One vendor's quoted price for one (matched) line item, as read
@@ -46,7 +48,7 @@ class ExtractedLineQuote(SQLModel, table=True):
     # quoted snippet), so the buyer can jump from a number to its evidence.
     source_citation: Optional[str] = None
 
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utcnow)
 
 
 class ExtractedAnswer(SQLModel, table=True):
@@ -63,4 +65,4 @@ class ExtractedAnswer(SQLModel, table=True):
     source_citation: Optional[str] = None
     needs_review: bool = Field(default=False)
 
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utcnow)

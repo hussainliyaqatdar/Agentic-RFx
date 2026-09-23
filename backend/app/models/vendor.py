@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, List, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
+from ._timestamps import utcnow
+
 if TYPE_CHECKING:
     from .rfx import RfxVendor
 
@@ -17,7 +19,7 @@ class Vendor(SQLModel, table=True):
     # dataset (e.g. "quotes in USD", "only covers 27/30 lines"). Not shown
     # to the buyer — it's context for whoever is maintaining the seed data.
     persona_notes: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utcnow)
 
     rfx_vendors: List["RfxVendor"] = Relationship(back_populates="vendor")
 

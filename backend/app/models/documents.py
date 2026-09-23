@@ -3,6 +3,7 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
+from ._timestamps import utcnow
 from .enums import DocumentType
 
 
@@ -20,4 +21,4 @@ class VendorResponseDocument(SQLModel, table=True):
     document_type: DocumentType
     storage_path: Optional[str] = None
     raw_email_text: Optional[str] = None
-    received_at: datetime = Field(default_factory=datetime.utcnow)
+    received_at: datetime = Field(default_factory=utcnow)
