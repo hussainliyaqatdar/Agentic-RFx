@@ -1,4 +1,7 @@
-const BASE_URL = '/api'
+// In dev, Vite's server proxy rewrites '/api' to the local backend (see
+// vite.config.ts). In production there's no such proxy, so a deployed build
+// needs VITE_API_URL pointing straight at the backend's real origin.
+const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
 
 async function handle<T>(response: Response, path: string): Promise<T> {
   if (!response.ok) {
