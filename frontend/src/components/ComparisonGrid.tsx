@@ -69,7 +69,7 @@ export function ComparisonGrid({ data, onOpenVendor }: Props) {
                             {cell.currency_normalized} {price}
                           </span>
                         </span>
-                      ) : v.response_status === 'pending' ? (
+                      ) : v.response_status === 'pending' || v.response_status === 'extracting' ? (
                         <span className="italic text-text-tertiary">processing…</span>
                       ) : (
                         <span className="text-text-tertiary">not quoted</span>
