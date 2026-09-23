@@ -180,6 +180,29 @@ export interface VendorDetail {
   documents: VendorDetailDocument[]
 }
 
+export interface ProposedAwardLine {
+  sku_code: string
+  vendor_id: number
+  vendor_name: string
+  reason: string
+}
+
+export interface ComputedTotal {
+  total_amount: number
+  currency: string
+  line_count: number
+  vendor_count: number
+  unpriceable_skus: string[]
+}
+
+export interface AnalystTurnResponse {
+  session_id: number
+  reply: string
+  proposed_award: ProposedAwardLine[]
+  confidence_note: string | null
+  computed_total: ComputedTotal | null
+}
+
 export const rfxApi = {
   list: () => apiGet<RfxSummary[]>('/rfx'),
   get: (id: number) => apiGet<RfxDetail>(`/rfx/${id}`),
@@ -191,4 +214,8 @@ export const rfxApi = {
   comparison: (id: number) => apiGet<ComparisonData>(`/rfx/${id}/comparison`),
   vendorDetail: (rfxId: number, vendorId: number) => apiGet<VendorDetail>(`/rfx/${rfxId}/vendors/${vendorId}/detail`),
   documentDownloadUrl: (rfxId: number, documentId: number) => `${BASE_URL}/rfx/${rfxId}/documents/${documentId}/download`,
+  analystTurn: (rfxId: number, sessionId: number | null, message: string) =>
+    apiPost<AnalystTurnResponse>(`/rfx/${rfxId}/analyst/turn`, { session_id: sessionId, message }),
+  award: (rfxId: number, awards: Record<string, number>) =>
+    apiPost<{ status: string; line_items_awarded: number }>(`/rfx/${rfxId}/award`, { awards }),
 }

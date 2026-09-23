@@ -17,6 +17,15 @@ const STATUS_TONE: Record<string, Tone> = {
   closed: 'neutral',
 }
 
+const STATUS_LABEL: Record<string, string> = {
+  draft: 'draft',
+  pending_approval: 'pending approval',
+  sent: 'sent',
+  responses_in: 'responded',
+  awarded: 'PO awarded',
+  closed: 'closed',
+}
+
 export function StatusPill({ tone, children }: { tone: Tone; children: React.ReactNode }) {
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${TONE_CLASSES[tone]}`}>
@@ -27,5 +36,5 @@ export function StatusPill({ tone, children }: { tone: Tone; children: React.Rea
 
 export function RfxStatusPill({ status }: { status: string }) {
   const tone = STATUS_TONE[status] ?? 'neutral'
-  return <StatusPill tone={tone}>{status.replace(/_/g, ' ')}</StatusPill>
+  return <StatusPill tone={tone}>{STATUS_LABEL[status] ?? status.replace(/_/g, ' ')}</StatusPill>
 }

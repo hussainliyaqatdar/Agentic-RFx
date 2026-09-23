@@ -11,6 +11,7 @@ from sqlmodel import Session, select
 from app.config import get_settings
 from app.db import get_session
 from app.models import (
+    AwardLineItem,
     ChatMessage,
     ChatRole,
     ChatSession,
@@ -27,6 +28,9 @@ from app.models import (
     VendorResponseDocument,
     VendorResponseStatus,
 )
+from app.services.analyst.agent import run_analyst_turn
+from app.services.analyst.context import format_analyst_context
+from app.services.comparison import build_comparison_data, build_questionnaire_data
 from app.services.copilot.agent import run_copilot_turn
 from app.services.copilot.schemas import RfxDraft
 from app.services.extraction.persistence import run_and_persist_extraction
@@ -213,74 +217,30 @@ def send_rfx(rfx_id: int, session: Session = Depends(get_session)):
 def extract_rfx(rfx_id: int, session: Session = Depends(get_session)):
     """Runs Module 3 for real against every vendor on this RFx and persists
     the results. Makes real Gemini calls - not instant, not free."""
-    if not session.get(Rfx, rfx_id):
+    rfx = session.get(Rfx, rfx_id)
+    if not rfx:
         raise HTTPException(status_code=404, detail="RFx not found")
     try:
-        return run_and_persist_extraction(session, rfx_id)
+        result = run_and_persist_extraction(session, rfx_id)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    # All vendors have responded and been processed - move the RFx from
+    # "sent" to "responded" so the buyer knows there's something to review.
+    rfx_vendors = session.exec(select(RfxVendor).where(RfxVendor.rfx_id == rfx_id)).all()
+    if rfx_vendors and all(rv.response_status == VendorResponseStatus.EXTRACTED for rv in rfx_vendors):
+        rfx.status = RfxStatus.RESPONSES_IN
+        session.add(rfx)
+        session.commit()
+
+    return result
 
 
 @router.get("/rfx/{rfx_id}/comparison")
 def get_comparison(rfx_id: int, session: Session = Depends(get_session)):
-    rfx = session.get(Rfx, rfx_id)
-    if not rfx:
+    if not session.get(Rfx, rfx_id):
         raise HTTPException(status_code=404, detail="RFx not found")
-
-    line_items = session.exec(
-        select(RfxLineItem).where(RfxLineItem.rfx_id == rfx_id).order_by(RfxLineItem.line_no)
-    ).all()
-    rfx_vendors = session.exec(select(RfxVendor).where(RfxVendor.rfx_id == rfx_id)).all()
-    vendor_by_id = {}
-    if rfx_vendors:
-        for v in session.exec(select(Vendor).where(Vendor.id.in_([rv.vendor_id for rv in rfx_vendors]))).all():
-            vendor_by_id[v.id] = v
-
-    quotes_by_key: dict[tuple[int, int], ExtractedLineQuote] = {}
-    if rfx_vendors:
-        rfx_vendor_ids = [rv.id for rv in rfx_vendors]
-        for q in session.exec(
-            select(ExtractedLineQuote).where(ExtractedLineQuote.rfx_vendor_id.in_(rfx_vendor_ids))
-        ).all():
-            if q.rfx_line_item_id is not None:
-                quotes_by_key[(q.rfx_vendor_id, q.rfx_line_item_id)] = q
-
-    vendor_columns = [
-        {"rfx_vendor_id": rv.id, "vendor_id": rv.vendor_id, "name": vendor_by_id[rv.vendor_id].name,
-         "response_status": rv.response_status}
-        for rv in rfx_vendors if rv.vendor_id in vendor_by_id
-    ]
-
-    rows = []
-    for li in line_items:
-        cells = {}
-        for rv in rfx_vendors:
-            quote = quotes_by_key.get((rv.id, li.id))
-            cells[str(rv.id)] = None if quote is None else {
-                "unit_price_normalized": quote.unit_price_normalized,
-                "currency_normalized": quote.currency_normalized,
-                "extraction_confidence": quote.extraction_confidence,
-                "match_confidence": quote.match_confidence,
-                "needs_review": quote.needs_review,
-                "conversion_notes": quote.conversion_notes,
-                "source_citation": quote.source_citation,
-                "vendor_raw_description": quote.vendor_raw_description,
-                "lead_time_days": quote.lead_time_days,
-                "evaluator_verdict": quote.evaluator_verdict,
-                "evaluator_reasoning": quote.evaluator_reasoning,
-            }
-        rows.append({
-            "line_item_id": li.id,
-            "line_no": li.line_no,
-            "sku_code": li.sku_code,
-            "description": li.description,
-            "spec_attributes": li.spec_attributes,
-            "quantity": li.quantity,
-            "unit": li.unit,
-            "cells": cells,
-        })
-
-    return {"vendors": vendor_columns, "rows": rows}
+    return build_comparison_data(session, rfx_id)
 
 
 @router.get("/rfx/{rfx_id}/vendors/{vendor_id}/detail")
@@ -332,3 +292,142 @@ def download_document(rfx_id: int, document_id: int, session: Session = Depends(
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File missing on disk")
     return FileResponse(path=file_path, filename=doc.file_name)
+
+
+class AnalystTurnRequest(BaseModel):
+    session_id: Optional[int] = None
+    message: str
+
+
+@router.post("/rfx/{rfx_id}/analyst/turn")
+def analyst_turn(rfx_id: int, payload: AnalystTurnRequest, session: Session = Depends(get_session)):
+    rfx = session.get(Rfx, rfx_id)
+    if not rfx:
+        raise HTTPException(status_code=404, detail="RFx not found")
+
+    if payload.session_id:
+        chat_session = session.get(ChatSession, payload.session_id)
+        if not chat_session or chat_session.rfx_id != rfx_id:
+            raise HTTPException(status_code=404, detail="Session not found")
+    else:
+        chat_session = ChatSession(session_type=ChatSessionType.ANALYST, rfx_id=rfx_id)
+        session.add(chat_session)
+        session.commit()
+        session.refresh(chat_session)
+
+    prior = session.exec(
+        select(ChatMessage).where(ChatMessage.session_id == chat_session.id).order_by(ChatMessage.created_at)
+    ).all()
+    history = [{"role": m.role.value, "content": m.content} for m in prior]
+
+    comparison = build_comparison_data(session, rfx_id)
+    questionnaire = build_questionnaire_data(session, rfx_id)
+    reference_context = format_analyst_context(rfx, comparison, questionnaire)
+
+    result = run_analyst_turn(reference_context, history, payload.message, label=f"analyst:{chat_session.id}")
+
+    session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.USER, content=payload.message))
+    session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.ASSISTANT, content=result.reply))
+    session.commit()
+
+    # The exact total for any proposed award is computed here, in plain code,
+    # from the real persisted quotes - never asserted by the model itself.
+    computed_total = None
+    if result.proposed_award:
+        line_by_sku = {
+            li.sku_code: li for li in session.exec(select(RfxLineItem).where(RfxLineItem.rfx_id == rfx_id)).all()
+        }
+        rfx_vendor_by_vendor_id = {
+            rv.vendor_id: rv for rv in session.exec(select(RfxVendor).where(RfxVendor.rfx_id == rfx_id)).all()
+        }
+        total = 0.0
+        priced_lines = 0
+        vendor_ids_used: set[int] = set()
+        unpriceable: list[str] = []
+        for line in result.proposed_award:
+            li = line_by_sku.get(line.sku_code)
+            rv = rfx_vendor_by_vendor_id.get(line.vendor_id)
+            quote = None
+            if li and rv:
+                quote = session.exec(
+                    select(ExtractedLineQuote).where(
+                        ExtractedLineQuote.rfx_vendor_id == rv.id, ExtractedLineQuote.rfx_line_item_id == li.id
+                    )
+                ).first()
+            if not li or not rv or not quote or quote.unit_price_normalized is None:
+                unpriceable.append(line.sku_code)
+                continue
+            total += quote.unit_price_normalized * li.quantity
+            priced_lines += 1
+            vendor_ids_used.add(line.vendor_id)
+        computed_total = {
+            "total_amount": round(total, 2),
+            "currency": rfx.canonical_currency,
+            "line_count": priced_lines,
+            "vendor_count": len(vendor_ids_used),
+            "unpriceable_skus": unpriceable,
+        }
+
+    return {
+        "session_id": chat_session.id,
+        "reply": result.reply,
+        "proposed_award": [pa.model_dump() for pa in result.proposed_award],
+        "confidence_note": result.confidence_note,
+        "computed_total": computed_total,
+    }
+
+
+class AwardRequest(BaseModel):
+    awards: dict[str, int]  # sku_code -> vendor_id
+
+
+@router.post("/rfx/{rfx_id}/award")
+def award_rfx(rfx_id: int, payload: AwardRequest, session: Session = Depends(get_session)):
+    rfx = session.get(Rfx, rfx_id)
+    if not rfx:
+        raise HTTPException(status_code=404, detail="RFx not found")
+
+    line_items = session.exec(select(RfxLineItem).where(RfxLineItem.rfx_id == rfx_id)).all()
+    if len(payload.awards) < len(line_items):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Award must cover all {len(line_items)} line items ({len(payload.awards)} given)",
+        )
+
+    rfx_vendors = session.exec(select(RfxVendor).where(RfxVendor.rfx_id == rfx_id)).all()
+    rfx_vendor_by_vendor_id = {rv.vendor_id: rv for rv in rfx_vendors}
+
+    # Clear any prior award for this RFx so re-committing replaces, not duplicates.
+    existing_awards = session.exec(
+        select(AwardLineItem).where(AwardLineItem.rfx_line_item_id.in_([li.id for li in line_items]))
+    ).all()
+    for existing in existing_awards:
+        session.delete(existing)
+    session.commit()
+
+    for li in line_items:
+        vendor_id = payload.awards.get(li.sku_code)
+        if vendor_id is None:
+            raise HTTPException(status_code=400, detail=f"No vendor assigned for {li.sku_code}")
+        rv = rfx_vendor_by_vendor_id.get(vendor_id)
+        if not rv:
+            raise HTTPException(status_code=400, detail=f"Vendor {vendor_id} is not attached to this RFx")
+        quote = session.exec(
+            select(ExtractedLineQuote).where(
+                ExtractedLineQuote.rfx_vendor_id == rv.id, ExtractedLineQuote.rfx_line_item_id == li.id
+            )
+        ).first()
+        if not quote or quote.unit_price_normalized is None:
+            raise HTTPException(status_code=400, detail=f"No priced quote from vendor {vendor_id} for {li.sku_code}")
+        session.add(AwardLineItem(
+            rfx_line_item_id=li.id,
+            awarded_vendor_id=vendor_id,
+            awarded_unit_price=quote.unit_price_normalized,
+            awarded_currency=quote.currency_normalized or rfx.canonical_currency,
+        ))
+
+    rfx.status = RfxStatus.AWARDED
+    session.add(rfx)
+    session.commit()
+
+    return {"status": "awarded", "line_items_awarded": len(line_items)}
