@@ -48,6 +48,14 @@ class ExtractedLineQuote(SQLModel, table=True):
     # quoted snippet), so the buyer can jump from a number to its evidence.
     source_citation: Optional[str] = None
 
+    # The evaluator agent's independent second opinion on this exact line -
+    # CONFIRMED / DISPUTED / UNCERTAIN / NOT_REVIEWED / RECOVERED_BY_EVALUATOR
+    # (the last for a line the worker never claimed at all but the evaluator
+    # determined was addressable). Kept alongside the line, not just in a log,
+    # so a review UI can show the disagreement and why in one place.
+    evaluator_verdict: Optional[str] = None
+    evaluator_reasoning: Optional[str] = None
+
     created_at: datetime = Field(default_factory=utcnow)
 
 
@@ -64,5 +72,7 @@ class ExtractedAnswer(SQLModel, table=True):
     confidence: Optional[float] = None
     source_citation: Optional[str] = None
     needs_review: bool = Field(default=False)
+    evaluator_verdict: Optional[str] = None
+    evaluator_reasoning: Optional[str] = None
 
     created_at: datetime = Field(default_factory=utcnow)

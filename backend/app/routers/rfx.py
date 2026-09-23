@@ -1,17 +1,22 @@
+from pathlib import Path
 from typing import Optional
 
 from app.models._timestamps import utcnow
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlmodel import Session, select
 
+from app.config import get_settings
 from app.db import get_session
 from app.models import (
     ChatMessage,
     ChatRole,
     ChatSession,
     ChatSessionType,
+    ExtractedAnswer,
+    ExtractedLineQuote,
     QuestionType,
     Rfx,
     RfxLineItem,
@@ -19,10 +24,12 @@ from app.models import (
     RfxStatus,
     RfxVendor,
     Vendor,
+    VendorResponseDocument,
     VendorResponseStatus,
 )
 from app.services.copilot.agent import run_copilot_turn
 from app.services.copilot.schemas import RfxDraft
+from app.services.extraction.persistence import run_and_persist_extraction
 
 router = APIRouter(tags=["rfx"])
 
@@ -200,3 +207,128 @@ def send_rfx(rfx_id: int, session: Session = Depends(get_session)):
     session.commit()
 
     return {"status": "sent", "vendor_count": len(vendors)}
+
+
+@router.post("/rfx/{rfx_id}/extract")
+def extract_rfx(rfx_id: int, session: Session = Depends(get_session)):
+    """Runs Module 3 for real against every vendor on this RFx and persists
+    the results. Makes real Gemini calls - not instant, not free."""
+    if not session.get(Rfx, rfx_id):
+        raise HTTPException(status_code=404, detail="RFx not found")
+    try:
+        return run_and_persist_extraction(session, rfx_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get("/rfx/{rfx_id}/comparison")
+def get_comparison(rfx_id: int, session: Session = Depends(get_session)):
+    rfx = session.get(Rfx, rfx_id)
+    if not rfx:
+        raise HTTPException(status_code=404, detail="RFx not found")
+
+    line_items = session.exec(
+        select(RfxLineItem).where(RfxLineItem.rfx_id == rfx_id).order_by(RfxLineItem.line_no)
+    ).all()
+    rfx_vendors = session.exec(select(RfxVendor).where(RfxVendor.rfx_id == rfx_id)).all()
+    vendor_by_id = {}
+    if rfx_vendors:
+        for v in session.exec(select(Vendor).where(Vendor.id.in_([rv.vendor_id for rv in rfx_vendors]))).all():
+            vendor_by_id[v.id] = v
+
+    quotes_by_key: dict[tuple[int, int], ExtractedLineQuote] = {}
+    if rfx_vendors:
+        rfx_vendor_ids = [rv.id for rv in rfx_vendors]
+        for q in session.exec(
+            select(ExtractedLineQuote).where(ExtractedLineQuote.rfx_vendor_id.in_(rfx_vendor_ids))
+        ).all():
+            if q.rfx_line_item_id is not None:
+                quotes_by_key[(q.rfx_vendor_id, q.rfx_line_item_id)] = q
+
+    vendor_columns = [
+        {"rfx_vendor_id": rv.id, "vendor_id": rv.vendor_id, "name": vendor_by_id[rv.vendor_id].name,
+         "response_status": rv.response_status}
+        for rv in rfx_vendors if rv.vendor_id in vendor_by_id
+    ]
+
+    rows = []
+    for li in line_items:
+        cells = {}
+        for rv in rfx_vendors:
+            quote = quotes_by_key.get((rv.id, li.id))
+            cells[str(rv.id)] = None if quote is None else {
+                "unit_price_normalized": quote.unit_price_normalized,
+                "currency_normalized": quote.currency_normalized,
+                "extraction_confidence": quote.extraction_confidence,
+                "match_confidence": quote.match_confidence,
+                "needs_review": quote.needs_review,
+                "conversion_notes": quote.conversion_notes,
+                "source_citation": quote.source_citation,
+                "vendor_raw_description": quote.vendor_raw_description,
+                "lead_time_days": quote.lead_time_days,
+                "evaluator_verdict": quote.evaluator_verdict,
+                "evaluator_reasoning": quote.evaluator_reasoning,
+            }
+        rows.append({
+            "line_item_id": li.id,
+            "line_no": li.line_no,
+            "sku_code": li.sku_code,
+            "description": li.description,
+            "spec_attributes": li.spec_attributes,
+            "quantity": li.quantity,
+            "unit": li.unit,
+            "cells": cells,
+        })
+
+    return {"vendors": vendor_columns, "rows": rows}
+
+
+@router.get("/rfx/{rfx_id}/vendors/{vendor_id}/detail")
+def get_vendor_detail(rfx_id: int, vendor_id: int, session: Session = Depends(get_session)):
+    rfx_vendor = session.exec(
+        select(RfxVendor).where(RfxVendor.rfx_id == rfx_id, RfxVendor.vendor_id == vendor_id)
+    ).first()
+    if not rfx_vendor:
+        raise HTTPException(status_code=404, detail="Vendor not attached to this RFx")
+    vendor = session.get(Vendor, vendor_id)
+
+    questions = session.exec(
+        select(RfxQuestion).where(RfxQuestion.rfx_id == rfx_id).order_by(RfxQuestion.question_no)
+    ).all()
+    answers_by_question = {
+        a.rfx_question_id: a
+        for a in session.exec(select(ExtractedAnswer).where(ExtractedAnswer.rfx_vendor_id == rfx_vendor.id)).all()
+    }
+    documents = session.exec(
+        select(VendorResponseDocument).where(VendorResponseDocument.rfx_vendor_id == rfx_vendor.id)
+    ).all()
+
+    return {
+        "vendor": {"id": vendor.id, "name": vendor.name, "contact_email": vendor.contact_email},
+        "response_status": rfx_vendor.response_status,
+        "answers": [
+            {
+                "question_no": q.question_no,
+                "question_text": q.question_text,
+                "answer_text": answers_by_question[q.id].answer_text if q.id in answers_by_question else None,
+                "confidence": answers_by_question[q.id].confidence if q.id in answers_by_question else None,
+                "needs_review": answers_by_question[q.id].needs_review if q.id in answers_by_question else None,
+                "evaluator_verdict": answers_by_question[q.id].evaluator_verdict if q.id in answers_by_question else None,
+            }
+            for q in questions
+        ],
+        "documents": [
+            {"id": d.id, "file_name": d.file_name, "document_type": d.document_type} for d in documents
+        ],
+    }
+
+
+@router.get("/rfx/{rfx_id}/documents/{document_id}/download")
+def download_document(rfx_id: int, document_id: int, session: Session = Depends(get_session)):
+    doc = session.get(VendorResponseDocument, document_id)
+    if not doc or not doc.storage_path:
+        raise HTTPException(status_code=404, detail="Document not found")
+    file_path = Path(get_settings().seed_data_dir) / doc.storage_path
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File missing on disk")
+    return FileResponse(path=file_path, filename=doc.file_name)
