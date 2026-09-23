@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnalystChatDrawer } from '../components/AnalystChatDrawer'
 import { AwardPanel } from '../components/AwardPanel'
@@ -88,7 +88,7 @@ export default function RfxDetailPage() {
       {tab === 'review' ? (
         <ReviewTab rfx={rfx} />
       ) : (
-        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} />
+        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} onRefresh={refresh} />
       )}
     </div>
   )
@@ -168,7 +168,17 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
   )
 }
 
-function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number; onAwarded: () => void }) {
+function ResponsesTab({
+  rfx,
+  rfxId,
+  onAwarded,
+  onRefresh,
+}: {
+  rfx: RfxDetail
+  rfxId: number
+  onAwarded: () => void
+  onRefresh: () => void
+}) {
   const [comparison, setComparison] = useState<ComparisonData | null>(null)
   const [loading, setLoading] = useState(true)
   const [extracting, setExtracting] = useState(false)
@@ -177,6 +187,9 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
   const [chatOpen, setChatOpen] = useState(false)
   const [awardPrefill, setAwardPrefill] = useState<ProposedAwardLine[] | null>(null)
   const [awardOpen, setAwardOpen] = useState(false)
+
+  const isExtracting = rfx.vendors.some((v) => v.response_status === 'extracting')
+  const wasExtractingRef = useRef(isExtracting)
 
   function loadComparison() {
     setLoading(true)
@@ -189,6 +202,27 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
 
   useEffect(loadComparison, [rfxId])
 
+  // Another tab, or a page reload mid-run, may have left extraction in
+  // progress server-side - poll until it's done instead of showing a stale button,
+  // and keep the grid's cells current as each vendor finishes.
+  useEffect(() => {
+    if (!isExtracting) return
+    const interval = setInterval(() => {
+      onRefresh()
+      loadComparison()
+    }, 4000)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExtracting, onRefresh])
+
+  useEffect(() => {
+    if (wasExtractingRef.current && !isExtracting) {
+      loadComparison()
+    }
+    wasExtractingRef.current = isExtracting
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExtracting])
+
   async function handleExtract() {
     setExtracting(true)
     setError(null)
@@ -197,6 +231,7 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
       loadComparison()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Extraction failed')
+      onRefresh()
     } finally {
       setExtracting(false)
     }
@@ -223,9 +258,13 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
             Vendor responses haven't been processed yet. This runs the real extraction pipeline (worker +
             evaluator agents) against each vendor's documents - real AI calls, takes a couple of minutes.
           </p>
-          <Button onClick={handleExtract} disabled={extracting}>
-            {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
-          </Button>
+          {isExtracting ? (
+            <p className="text-sm font-medium text-text-primary">Still processing vendor responses…</p>
+          ) : (
+            <Button onClick={handleExtract} disabled={extracting}>
+              {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
+            </Button>
+          )}
         </div>
       )}
 
