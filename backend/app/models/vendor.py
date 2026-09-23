@@ -15,6 +15,10 @@ class Vendor(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     contact_email: str
+    # Maps this vendor row back to its seed folder (data/seed/vendors/<slug>/)
+    # so Module 3's extraction pipeline knows which documents to read. Real
+    # vendor onboarding would replace this with actual uploaded documents.
+    slug: Optional[str] = Field(default=None, index=True)
     # Internal note on the fabricated persona this vendor plays in the demo
     # dataset (e.g. "quotes in USD", "only covers 27/30 lines"). Not shown
     # to the buyer — it's context for whoever is maintaining the seed data.

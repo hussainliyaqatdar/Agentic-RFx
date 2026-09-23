@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+import httpx
 from google import genai
 from google.genai import types
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
@@ -24,6 +25,10 @@ def _is_retryable(exc: BaseException) -> bool:
     # 503/UNAVAILABLE is genuine transient overload, worth a couple of retries.
     # 429/RESOURCE_EXHAUSTED on the free tier is a per-day quota, not a per-minute
     # rate limit - retrying it just burns more of the same exhausted daily budget.
+    # Connection-level drops (proxy/network hiccups on a long request) are also
+    # worth a retry - they're not the API telling us anything, just the wire.
+    if isinstance(exc, (httpx.RemoteProtocolError, httpx.ConnectError, httpx.ReadTimeout)):
+        return True
     message = str(exc)
     return "UNAVAILABLE" in message or "503" in message
 
