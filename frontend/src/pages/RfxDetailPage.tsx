@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { AnalystChatDrawer } from '../components/AnalystChatDrawer'
+import { AwardPanel } from '../components/AwardPanel'
 import { Button } from '../components/Button'
 import { ComparisonGrid } from '../components/ComparisonGrid'
 import { ChevronLeftIcon, SparkleIcon } from '../components/icons'
 import { RfxStatusPill } from '../components/StatusPill'
 import { VendorDetailDrawer } from '../components/VendorDetailDrawer'
-import { rfxApi, type ComparisonData, type RfxDetail } from '../lib/api'
+import { rfxApi, type ComparisonData, type ProposedAwardLine, type RfxDetail } from '../lib/api'
 
-type Tab = 'review' | 'responses'
+type Tab = 'responses' | 'review'
 
 function formatSpec(spec: RfxDetail['line_items'][number]['spec_attributes']): string {
   if (spec.summary) return spec.summary
@@ -24,7 +26,7 @@ export default function RfxDetailPage() {
   const { rfxId } = useParams()
   const navigate = useNavigate()
   const [rfx, setRfx] = useState<RfxDetail | null>(null)
-  const [tab, setTab] = useState<Tab>('review')
+  const [tab, setTab] = useState<Tab>('responses')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -70,7 +72,7 @@ export default function RfxDetailPage() {
       </div>
 
       <div className="mb-6 flex gap-6 border-b border-border-default">
-        {(['review', 'responses'] as Tab[]).map((t) => (
+        {(['responses', 'review'] as Tab[]).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -83,7 +85,11 @@ export default function RfxDetailPage() {
         ))}
       </div>
 
-      {tab === 'review' ? <ReviewTab rfx={rfx} /> : <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} />}
+      {tab === 'review' ? (
+        <ReviewTab rfx={rfx} />
+      ) : (
+        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} />
+      )}
     </div>
   )
 }
@@ -162,12 +168,15 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
   )
 }
 
-function ResponsesTab({ rfx, rfxId }: { rfx: RfxDetail; rfxId: number }) {
+function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number; onAwarded: () => void }) {
   const [comparison, setComparison] = useState<ComparisonData | null>(null)
   const [loading, setLoading] = useState(true)
   const [extracting, setExtracting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [openVendorId, setOpenVendorId] = useState<number | null>(null)
+  const [chatOpen, setChatOpen] = useState(false)
+  const [awardPrefill, setAwardPrefill] = useState<ProposedAwardLine[] | null>(null)
+  const [awardOpen, setAwardOpen] = useState(false)
 
   function loadComparison() {
     setLoading(true)
@@ -221,20 +230,53 @@ function ResponsesTab({ rfx, rfxId }: { rfx: RfxDetail; rfxId: number }) {
       )}
 
       {!loading && hasAnyExtraction && comparison && (
-        <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
-      )}
+        <>
+          <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
 
-      <button
-        disabled
-        title="Analyst chat is module 5 - not built yet"
-        className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-tertiary opacity-60"
-      >
-        <SparkleIcon width={16} height={16} />
-        Ask the analyst chat about these responses
-      </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setChatOpen(true)}
+              className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-primary hover:bg-bg-hover"
+            >
+              <SparkleIcon width={16} height={16} className="text-brand-blue" />
+              Ask the analyst chat about these responses
+            </button>
+            {rfx.status !== 'awarded' && (
+              <Button onClick={() => { setAwardPrefill(null); setAwardOpen(true) }}>
+                Award decision
+              </Button>
+            )}
+          </div>
+        </>
+      )}
 
       {openVendorId != null && (
         <VendorDetailDrawer rfxId={rfxId} vendorId={openVendorId} onClose={() => setOpenVendorId(null)} />
+      )}
+
+      {chatOpen && (
+        <AnalystChatDrawer
+          rfxId={rfxId}
+          onClose={() => setChatOpen(false)}
+          onApplyAward={(awards) => {
+            setAwardPrefill(awards)
+            setChatOpen(false)
+            setAwardOpen(true)
+          }}
+        />
+      )}
+
+      {awardOpen && comparison && (
+        <AwardPanel
+          rfxId={rfxId}
+          comparison={comparison}
+          prefill={awardPrefill}
+          onClose={() => setAwardOpen(false)}
+          onAwarded={() => {
+            setAwardOpen(false)
+            onAwarded()
+          }}
+        />
       )}
     </div>
   )
