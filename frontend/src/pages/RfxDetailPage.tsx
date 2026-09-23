@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../components/Button'
+import { ComparisonGrid } from '../components/ComparisonGrid'
 import { ChevronLeftIcon, SparkleIcon } from '../components/icons'
 import { RfxStatusPill } from '../components/StatusPill'
-import { rfxApi, type RfxDetail } from '../lib/api'
+import { VendorDetailDrawer } from '../components/VendorDetailDrawer'
+import { rfxApi, type ComparisonData, type RfxDetail } from '../lib/api'
 
 type Tab = 'review' | 'responses'
+
+function formatSpec(spec: RfxDetail['line_items'][number]['spec_attributes']): string {
+  if (spec.summary) return spec.summary
+  const parts: string[] = []
+  if (spec.ply) parts.push(`${spec.ply}-ply`)
+  if (spec.flute && spec.flute !== '-') parts.push(`${spec.flute}-flute`)
+  if (spec.dimensions_mm) parts.push(`${spec.dimensions_mm}mm`)
+  if (spec.gsm) parts.push(`${spec.gsm} GSM`)
+  if (spec.printed) parts.push('printed')
+  return parts.length ? parts.join(', ') : '—'
+}
 
 export default function RfxDetailPage() {
   const { rfxId } = useParams()
@@ -70,7 +83,7 @@ export default function RfxDetailPage() {
         ))}
       </div>
 
-      {tab === 'review' ? <ReviewTab rfx={rfx} /> : <ResponsesTab rfx={rfx} />}
+      {tab === 'review' ? <ReviewTab rfx={rfx} /> : <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} />}
     </div>
   )
 }
@@ -123,7 +136,7 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
                     )}
                   </td>
                   <td className="px-4 py-2.5">{li.description}</td>
-                  <td className="px-4 py-2.5 text-text-secondary">{li.spec_attributes?.summary ?? '—'}</td>
+                  <td className="px-4 py-2.5 text-text-secondary">{formatSpec(li.spec_attributes)}</td>
                   <td className="px-4 py-2.5">{li.quantity.toLocaleString('en-IN')}</td>
                   <td className="px-4 py-2.5 text-text-secondary">{li.unit}</td>
                 </tr>
@@ -149,7 +162,37 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
   )
 }
 
-function ResponsesTab({ rfx }: { rfx: RfxDetail }) {
+function ResponsesTab({ rfx, rfxId }: { rfx: RfxDetail; rfxId: number }) {
+  const [comparison, setComparison] = useState<ComparisonData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [extracting, setExtracting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [openVendorId, setOpenVendorId] = useState<number | null>(null)
+
+  function loadComparison() {
+    setLoading(true)
+    rfxApi
+      .comparison(rfxId)
+      .then(setComparison)
+      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(loadComparison, [rfxId])
+
+  async function handleExtract() {
+    setExtracting(true)
+    setError(null)
+    try {
+      await rfxApi.extract(rfxId)
+      loadComparison()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Extraction failed')
+    } finally {
+      setExtracting(false)
+    }
+  }
+
   if (rfx.status === 'draft') {
     return (
       <p className="rounded-xl border border-dashed border-border-strong bg-white px-5 py-10 text-center text-sm text-text-secondary">
@@ -157,43 +200,42 @@ function ResponsesTab({ rfx }: { rfx: RfxDetail }) {
       </p>
     )
   }
+
+  const hasAnyExtraction = comparison?.rows.some((r) => Object.values(r.cells).some((c) => c != null))
+
   return (
     <div className="space-y-4">
-      <p className="rounded-xl border border-dashed border-border-strong bg-white px-5 py-6 text-sm text-text-secondary">
-        Extraction (module 3) doesn't write to the database yet - vendor responses are processed against the
-        seed dataset directly for now. Once wired up, each vendor's quote and questionnaire answers will show
-        here with confidence and source citations.
-      </p>
-      <div className="overflow-hidden rounded-xl border border-border-default bg-white">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border-default text-left text-xs font-semibold uppercase tracking-wide text-text-secondary">
-              <th className="px-4 py-2.5">Vendor</th>
-              <th className="px-4 py-2.5">Sent</th>
-              <th className="px-4 py-2.5">Response status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rfx.vendors.map((v) => (
-              <tr key={v.id} className="border-b border-border-default text-text-primary last:border-0">
-                <td className="px-4 py-2.5">{v.name}</td>
-                <td className="px-4 py-2.5 text-text-secondary">
-                  {v.sent_at ? new Date(v.sent_at).toLocaleDateString('en-IN') : '—'}
-                </td>
-                <td className="px-4 py-2.5 text-text-secondary capitalize">{v.response_status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {error && <p className="text-sm text-danger-text">{error}</p>}
+      {loading && <p className="text-sm text-text-secondary">Loading…</p>}
+
+      {!loading && !hasAnyExtraction && (
+        <div className="rounded-xl border border-dashed border-border-strong bg-white px-5 py-10 text-center">
+          <p className="mb-3 text-sm text-text-secondary">
+            Vendor responses haven't been processed yet. This runs the real extraction pipeline (worker +
+            evaluator agents) against each vendor's documents - real AI calls, takes a couple of minutes.
+          </p>
+          <Button onClick={handleExtract} disabled={extracting}>
+            {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
+          </Button>
+        </div>
+      )}
+
+      {!loading && hasAnyExtraction && comparison && (
+        <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
+      )}
+
       <button
         disabled
-        title="Analyst chat depends on module 3 writing extracted responses to the database"
+        title="Analyst chat is module 5 - not built yet"
         className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-tertiary opacity-60"
       >
         <SparkleIcon width={16} height={16} />
         Ask the analyst chat about these responses
       </button>
+
+      {openVendorId != null && (
+        <VendorDetailDrawer rfxId={rfxId} vendorId={openVendorId} onClose={() => setOpenVendorId(null)} />
+      )}
     </div>
   )
 }
