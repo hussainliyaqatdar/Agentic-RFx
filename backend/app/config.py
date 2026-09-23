@@ -1,6 +1,9 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
@@ -10,6 +13,7 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-3.8-flash"
     database_url: str = "sqlite:///./agentic_rfx.db"
     storage_dir: str = "./storage"
+    seed_data_dir: str = str(_REPO_ROOT / "data" / "seed")
 
 
 @lru_cache

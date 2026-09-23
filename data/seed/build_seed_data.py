@@ -30,6 +30,8 @@ ROOT = Path(__file__).resolve().parent
 VENDORS_DIR = ROOT / "vendors"
 FX_USD_TO_INR = 83.50
 GST_PERCENT = 18
+BUYER_NAME = "YoloMart"
+RFX_TITLE = f"{BUYER_NAME} - Corrugated Packaging RFx (FY2026)"
 
 # ---------------------------------------------------------------------------
 # Canonical line items - 22 popular corrugated packaging SKUs + 8 specialty
@@ -343,7 +345,7 @@ def render_vendor_a(vendor_dir, lines, answers):
 
     doc = Document()
     doc.add_heading("Quality Questionnaire Response", level=1)
-    doc.add_paragraph("Apex Packaging Solutions - RFx: Corrugated Packaging FY2026")
+    doc.add_paragraph(f"Apex Packaging Solutions  |  Prepared for: {BUYER_NAME}  |  RFx: Corrugated Packaging FY2026")
     for q in QUESTIONNAIRE:
         p = doc.add_paragraph()
         run = p.add_run(f"Q{q['question_no']}. {q['question_text']}")
@@ -369,7 +371,7 @@ def render_vendor_b(vendor_dir, lines, answers):
     wb.save(vendor_dir / "quote.xlsx")
 
     answer_prose = (
-        f"Dear Sir/Madam,\n\n"
+        f"Dear {BUYER_NAME} Procurement Team,\n\n"
         f"Please find attached our quotation SJ-Q-2201 for the corrugated packaging items in your RFx. "
         f"Rates are ex-factory, GST extra as shown, validity 30 days.\n\n"
         f"Regarding the queries in your questionnaire - yes we are ISO 9001 certified (cert available on request), "
@@ -398,6 +400,7 @@ def render_vendor_c(vendor_dir, lines, answers):
         Paragraph("GLOBAL CORRFAB LTD.", header_style),
         Paragraph("Plot 42, Export Promotion Industrial Park, Mundra SEZ, Gujarat 370421, India &nbsp;|&nbsp; export@globalcorrfab.example &nbsp;|&nbsp; GSTIN 24AAGCG1234F1Z5", sub_style),
         Spacer(1, 10 * mm),
+        Paragraph(f"To: {BUYER_NAME}, Procurement Team", styles["Normal"]),
         Paragraph("QUOTATION - RFx: Corrugated Packaging FY2026", styles["Heading2"]),
         Spacer(1, 4 * mm),
     ]
@@ -436,7 +439,7 @@ def render_vendor_c(vendor_dir, lines, answers):
     (vendor_dir / "followup_email.txt").write_text(
         "From: export@globalcorrfab.example\n"
         "Subject: RE: RFx - Corrugated Packaging - commercial terms\n\n"
-        "Hi,\n\n"
+        f"Hi {BUYER_NAME} team,\n\n"
         "Following up on our quotation (attached separately as PDF) with the commercial terms that aren't on "
         "the formal document:\n\n"
         "- Payment: 30% advance, balance 70% against B/L copy\n"
@@ -469,7 +472,8 @@ def render_vendor_d(vendor_dir, lines, answers):
     doc = Document()
     doc.add_heading("Suretypack Industries - Quotation & Questionnaire", level=1)
     doc.add_paragraph(
-        "Dear Sir, thank you for the opportunity to quote on your corrugated packaging requirement. "
+        f"Dear {BUYER_NAME} Procurement Team, thank you for the opportunity to quote on your corrugated "
+        "packaging requirement. "
         "Please find our pricing below, grouped by carton type for ease of reading. All rates are per box "
         "unless stated otherwise, ex-factory Bhiwandi, GST as applicable. We are unable to quote for the "
         "automated case-erector cartons (tolerance beyond our current tooling), the pallet corner boards, "
@@ -574,10 +578,14 @@ def render_vendor_e(vendor_dir, lines, answers):
         answered_lines.append(f"CoC with shipment - {answers[8]}")
     (vendor_dir / "followup_email.txt").write_text(
         "From: balajipkg@example.com\n"
-        "Subject: rates\n\n"
+        f"Subject: rates - {BUYER_NAME}\n\n"
         "sir, rate card attached from last week but pls note update -\n\n"
-        f"Rs.{VENDOR_E_RATE_5PLY_PER_KG:.0f}/kg for the 5-ply, {VENDOR_E_RATE_3PLY_PER_KG:.0f} for the 3-ply, "
-        "rest same as last year, freight extra.\n\n"
+        f"Rs.{VENDOR_E_RATE_5PLY_PER_KG:.0f}/kg for the 5-ply, {VENDOR_E_RATE_3PLY_PER_KG:.0f} for the 3-ply - "
+        "this is for our plain standard boxes only, not the printed ones, document/mailer boxes, heavy "
+        "cartons, small parts boxes or flat sheets. for all of those, rest same as last year. we don't do "
+        "the special/custom stuff - POS boxes, cold chain, export cartons, RRP trays, corner boards, "
+        "e-commerce mailers etc - so no rate for those from us, sorry sir.\n\n"
+        "freight extra.\n\n"
         "for your questions - " + "; ".join(answered_lines) + ". other details will send separately.\n\n"
         "balaji pkg",
         encoding="utf-8",
@@ -593,8 +601,29 @@ RENDERERS = {
 }
 
 
+RFX_META = {
+    "buyer_name": BUYER_NAME,
+    "title": RFX_TITLE,
+    "category": "Corrugated Packaging",
+    "scope_description": (
+        f"{BUYER_NAME} needs 30 line items of corrugated packaging for its fulfilment centres - "
+        "standard cartons plus e-commerce/retail-ready specialty items - sourced from 5 vendors."
+    ),
+    "canonical_currency": "INR",
+    # What YoloMart is asking for - each vendor's own proposed terms (in their quote/email) are
+    # compared against this, not assumed to match it.
+    "payment_terms": "Net 30 from delivery",
+    "delivery_terms": "DAP, YoloMart fulfilment centre, Bhiwandi, Maharashtra",
+    "validity_days": 30,
+    # Reference FX rate for converting any non-INR vendor quote (e.g. Global Corrfab's USD
+    # pricing) to the canonical currency. Static by design - see project README.
+    "fx_rates": {"USD_INR": FX_USD_TO_INR},
+}
+
+
 def main():
     ROOT.mkdir(parents=True, exist_ok=True)
+    (ROOT / "rfx.json").write_text(json.dumps(RFX_META, indent=2), encoding="utf-8")
     (ROOT / "line_items.json").write_text(json.dumps(LINE_ITEM_DICTS, indent=2), encoding="utf-8")
     (ROOT / "questionnaire.json").write_text(json.dumps(QUESTIONNAIRE, indent=2), encoding="utf-8")
     (ROOT / "vendors.json").write_text(json.dumps(VENDORS, indent=2), encoding="utf-8")

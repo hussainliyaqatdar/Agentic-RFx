@@ -1,0 +1,13 @@
+{
+  "buyer_name": "YoloMart",
+  "title": "YoloMart - Corrugated Packaging RFx (FY2026)",
+  "category": "Corrugated Packaging",
+  "scope_description": "YoloMart needs 30 line items of corrugated packaging for its fulfilment centres - standard cartons plus e-commerce/retail-ready specialty items - sourced from 5 vendors.",
+  "canonical_currency": "INR",
+  "payment_terms": "Net 30 from delivery",
+  "delivery_terms": "DAP, YoloMart fulfilment centre, Bhiwandi, Maharashtra",
+  "validity_days": 30,
+  "fx_rates": {
+    "USD_INR": 83.5
+  }
+}
