@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnalystChatDrawer } from '../components/AnalystChatDrawer'
 import { AwardPanel } from '../components/AwardPanel'
 import { Button, IconButton } from '../components/Button'
 import { ComparisonGrid } from '../components/ComparisonGrid'
-import { CheckIcon, ChevronLeftIcon, PencilIcon, SparkleIcon, XIcon } from '../components/icons'
+import { CheckIcon, ChevronLeftIcon, PencilIcon, PlusIcon, SparkleIcon, XIcon } from '../components/icons'
 import { RfxStatusPill } from '../components/StatusPill'
 import { VendorDetailDrawer } from '../components/VendorDetailDrawer'
 import { rfxApi, type ComparisonData, type ProposedAwardLine, type RfxDetail } from '../lib/api'
@@ -88,7 +88,7 @@ export default function RfxDetailPage() {
       {tab === 'review' ? (
         <ReviewTab rfx={rfx} onUpdated={refresh} />
       ) : (
-        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} />
+        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} onRefresh={refresh} />
       )}
     </div>
   )
@@ -301,7 +301,17 @@ function LineItemRow({
   )
 }
 
-function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number; onAwarded: () => void }) {
+function ResponsesTab({
+  rfx,
+  rfxId,
+  onAwarded,
+  onRefresh,
+}: {
+  rfx: RfxDetail
+  rfxId: number
+  onAwarded: () => void
+  onRefresh: () => void
+}) {
   const [comparison, setComparison] = useState<ComparisonData | null>(null)
   const [loading, setLoading] = useState(true)
   const [extracting, setExtracting] = useState(false)
@@ -310,6 +320,9 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
   const [chatOpen, setChatOpen] = useState(false)
   const [awardPrefill, setAwardPrefill] = useState<ProposedAwardLine[] | null>(null)
   const [awardOpen, setAwardOpen] = useState(false)
+
+  const isExtracting = rfx.vendors.some((v) => v.response_status === 'extracting')
+  const wasExtractingRef = useRef(isExtracting)
 
   function loadComparison() {
     setLoading(true)
@@ -322,6 +335,27 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
 
   useEffect(loadComparison, [rfxId])
 
+  // Another tab, or a page reload mid-run, may have left extraction in
+  // progress server-side - poll until it's done instead of showing a stale button,
+  // and keep the grid's cells current as each vendor finishes.
+  useEffect(() => {
+    if (!isExtracting) return
+    const interval = setInterval(() => {
+      onRefresh()
+      loadComparison()
+    }, 4000)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExtracting, onRefresh])
+
+  useEffect(() => {
+    if (wasExtractingRef.current && !isExtracting) {
+      loadComparison()
+    }
+    wasExtractingRef.current = isExtracting
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExtracting])
+
   async function handleExtract() {
     setExtracting(true)
     setError(null)
@@ -330,6 +364,7 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
       loadComparison()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Extraction failed')
+      onRefresh()
     } finally {
       setExtracting(false)
     }
@@ -356,30 +391,51 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
             Vendor responses haven't been processed yet. This runs the real extraction pipeline (worker +
             evaluator agents) against each vendor's documents - real AI calls, takes a couple of minutes.
           </p>
-          <Button onClick={handleExtract} disabled={extracting}>
-            {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
-          </Button>
+          {isExtracting ? (
+            <p className="text-sm font-medium text-text-primary">Still processing vendor responses…</p>
+          ) : (
+            <Button onClick={handleExtract} disabled={extracting}>
+              {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
+            </Button>
+          )}
         </div>
       )}
 
       {!loading && hasAnyExtraction && comparison && (
         <>
-          <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
-
-          <div className="flex gap-3">
-            <button
-              onClick={() => setChatOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-primary hover:bg-bg-hover"
-            >
-              <SparkleIcon width={16} height={16} className="text-brand-blue" />
-              Ask the analyst chat about these responses
-            </button>
-            {rfx.status !== 'awarded' && (
-              <Button onClick={() => { setAwardPrefill(null); setAwardOpen(true) }}>
-                Award decision
-              </Button>
-            )}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-secondary">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-success-text" /> confirmed
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-warning-text" /> needs review
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm border border-success-text bg-success-bg" /> cheapest
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm border border-danger-text bg-danger-bg" /> priciest
+              </span>
+              <span>Click any price for its source and reasoning.</span>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <button
+                onClick={() => setChatOpen(true)}
+                className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-primary hover:bg-bg-hover"
+              >
+                <SparkleIcon width={16} height={16} className="text-brand-blue" />
+                Ask the analyst chat about these responses
+              </button>
+              {rfx.status !== 'awarded' && (
+                <Button onClick={() => { setAwardPrefill(null); setAwardOpen(true) }}>
+                  Award decision
+                </Button>
+              )}
+            </div>
           </div>
+
+          <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
         </>
       )}
 
