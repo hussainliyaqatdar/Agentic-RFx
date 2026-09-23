@@ -18,6 +18,11 @@ app.include_router(health.router)
 app.include_router(rfx.router)
 
 
+@app.get("/")
+def root() -> dict:
+    return {"service": "Agentic RFx API", "docs": "/docs", "health": "/health"}
+
+
 @app.on_event("startup")
 def on_startup() -> None:
     init_db()
