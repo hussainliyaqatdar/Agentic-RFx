@@ -170,6 +170,34 @@ class CopilotTurnRequest(BaseModel):
     message: str
 
 
+@router.get("/copilot/sessions/latest")
+def get_latest_copilot_session(session: Session = Depends(get_session)):
+    """The most recent RFx-drafting conversation that hasn't been finalized yet
+    (rfx_id still null), so reopening the co-pilot resumes where the buyer left
+    off instead of starting over. Returns null if there's nothing to resume."""
+    chat_session = session.exec(
+        select(ChatSession)
+        .where(ChatSession.session_type == ChatSessionType.RFX_DRAFTING, ChatSession.rfx_id.is_(None))
+        .order_by(ChatSession.created_at.desc())
+    ).first()
+    if not chat_session:
+        return None
+
+    messages = session.exec(
+        select(ChatMessage).where(ChatMessage.session_id == chat_session.id).order_by(ChatMessage.created_at)
+    ).all()
+    draft = RfxDraft.model_validate(chat_session.draft_state) if chat_session.draft_state else RfxDraft()
+    ready_to_finalize = bool(
+        draft.line_items and draft.payment_terms and draft.delivery_terms and draft.validity_days
+    )
+    return {
+        "session_id": chat_session.id,
+        "messages": [{"role": m.role.value, "content": m.content} for m in messages[-10:]],
+        "draft": draft.model_dump(),
+        "ready_to_finalize": ready_to_finalize,
+    }
+
+
 @router.post("/copilot/turn")
 def copilot_turn(payload: CopilotTurnRequest, session: Session = Depends(get_session)):
     if payload.session_id:
@@ -188,7 +216,7 @@ def copilot_turn(payload: CopilotTurnRequest, session: Session = Depends(get_ses
     history = [{"role": m.role.value, "content": m.content} for m in prior]
     current_draft = RfxDraft.model_validate(chat_session.draft_state) if chat_session.draft_state else None
 
-    result = run_copilot_turn(history, current_draft, payload.message, label=f"copilot:{chat_session.id}")
+    result = run_copilot_turn(session, history, current_draft, payload.message, label=f"copilot:{chat_session.id}")
 
     session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.USER, content=payload.message))
     session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.ASSISTANT, content=result.reply))
