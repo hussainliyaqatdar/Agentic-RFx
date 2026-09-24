@@ -41,7 +41,7 @@ def run_copilot_turn(
     history: list[dict], current_draft: RfxDraft | None, user_message: str, label: str = "copilot"
 ) -> CopilotTurnOutput:
     settings = get_settings()
-    bundle = context_module.load_reference_bundle()
+    bundle = context_module.load_reference_bundle(line_items_file="sku_catalog.json")
     reference_context = context_module.format_reference_context(bundle)
 
     contents = []

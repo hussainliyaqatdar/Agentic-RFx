@@ -11,10 +11,15 @@ def _load_json(name: str):
 
 
 @lru_cache
-def load_reference_bundle() -> dict:
+def load_reference_bundle(line_items_file: str = "line_items.json") -> dict:
+    """`line_items_file` defaults to the seeded demo RFx's own 30 line items,
+    used by the extraction pipeline to match against what vendors were actually
+    sent. The co-pilot passes "sku_catalog.json" instead - the buyer's broader
+    SKU catalog, independent of any single RFx - so it can ground drafts
+    against items that were never part of that one demo RFx."""
     return {
         "rfx": _load_json("rfx.json"),
-        "line_items": _load_json("line_items.json"),
+        "line_items": _load_json(line_items_file),
         "questionnaire": _load_json("questionnaire.json"),
     }
 
@@ -34,10 +39,11 @@ def format_reference_context(bundle: dict) -> str:
     ]
     for li in bundle["line_items"]:
         spec = li["spec_attributes"]
+        bf_part = f" min_bf={spec['min_bf']}" if spec.get("min_bf") is not None else ""
         lines.append(
             f"- {li['sku_code']}: {li['description']} | requested qty {li['quantity']} {li['unit']} | "
             f"spec: ply={spec['ply']} flute={spec['flute']} dims={spec['dimensions_mm']}mm gsm={spec['gsm']} "
-            f"printed={spec['printed']} weight={spec['weight_kg']}kg | "
+            f"printed={spec['printed']} weight={spec['weight_kg']}kg{bf_part} | "
             f"last known price: {li['reference_unit_price']} {li['reference_currency']}/{li['unit']} "
             f"({li['reference_period_label']}) - use this if the vendor says something like "
             f"'same as last year' for this item"

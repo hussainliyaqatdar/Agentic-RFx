@@ -1,0 +1,1092 @@
+[
+  {
+    "line_no": 1,
+    "sku_code": "PKG-101",
+    "description": "3-ply RSC box, B-flute, 200x150x100mm, plain kraft",
+    "category": "plain_rsc_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "200x150x100",
+      "gsm": 120,
+      "printed": false,
+      "weight_kg": 0.12
+    },
+    "quantity": 5000,
+    "unit": "box",
+    "reference_unit_price": 14.5,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 2,
+    "sku_code": "PKG-102",
+    "description": "3-ply RSC box, B-flute, 300x200x150mm, plain kraft",
+    "category": "plain_rsc_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "300x200x150",
+      "gsm": 120,
+      "printed": false,
+      "weight_kg": 0.22
+    },
+    "quantity": 4000,
+    "unit": "box",
+    "reference_unit_price": 22.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 3,
+    "sku_code": "PKG-103",
+    "description": "3-ply RSC box, B-flute, 400x300x200mm, plain kraft",
+    "category": "plain_rsc_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "400x300x200",
+      "gsm": 140,
+      "printed": false,
+      "weight_kg": 0.38
+    },
+    "quantity": 3000,
+    "unit": "box",
+    "reference_unit_price": 34.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 4,
+    "sku_code": "PKG-104",
+    "description": "3-ply RSC box, C-flute, 300x250x200mm, plain kraft",
+    "category": "plain_rsc_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "C",
+      "dimensions_mm": "300x250x200",
+      "gsm": 140,
+      "printed": false,
+      "weight_kg": 0.36
+    },
+    "quantity": 3000,
+    "unit": "box",
+    "reference_unit_price": 33.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 5,
+    "sku_code": "PKG-105",
+    "description": "3-ply RSC box, C-flute, 450x350x250mm, plain kraft",
+    "category": "plain_rsc_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "C",
+      "dimensions_mm": "450x350x250",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.55
+    },
+    "quantity": 2000,
+    "unit": "box",
+    "reference_unit_price": 48.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 6,
+    "sku_code": "PKG-106",
+    "description": "5-ply RSC box, BC-flute, 400x300x300mm, plain kraft",
+    "category": "plain_rsc_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "400x300x300",
+      "gsm": 180,
+      "printed": false,
+      "weight_kg": 0.62
+    },
+    "quantity": 2500,
+    "unit": "box",
+    "reference_unit_price": 58.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 7,
+    "sku_code": "PKG-107",
+    "description": "5-ply RSC box, BC-flute, 500x400x350mm, plain kraft",
+    "category": "plain_rsc_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "500x400x350",
+      "gsm": 180,
+      "printed": false,
+      "weight_kg": 0.85
+    },
+    "quantity": 2000,
+    "unit": "box",
+    "reference_unit_price": 76.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 8,
+    "sku_code": "PKG-108",
+    "description": "5-ply RSC box, BC-flute, 600x450x400mm, plain kraft",
+    "category": "plain_rsc_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "600x450x400",
+      "gsm": 200,
+      "printed": false,
+      "weight_kg": 1.1
+    },
+    "quantity": 1500,
+    "unit": "box",
+    "reference_unit_price": 98.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 9,
+    "sku_code": "PKG-109",
+    "description": "5-ply RSC box, BC-flute, 350x350x350mm cube, plain kraft",
+    "category": "plain_rsc_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "350x350x350",
+      "gsm": 180,
+      "printed": false,
+      "weight_kg": 0.68
+    },
+    "quantity": 1800,
+    "unit": "box",
+    "reference_unit_price": 62.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 10,
+    "sku_code": "PKG-110",
+    "description": "3-ply RSC box, B-flute, 250x200x150mm, 1-colour print",
+    "category": "printed_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "250x200x150",
+      "gsm": 130,
+      "printed": true,
+      "weight_kg": 0.24
+    },
+    "quantity": 3500,
+    "unit": "box",
+    "reference_unit_price": 26.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 11,
+    "sku_code": "PKG-111",
+    "description": "3-ply RSC box, B-flute, 350x250x200mm, 1-colour print",
+    "category": "printed_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "350x250x200",
+      "gsm": 130,
+      "printed": true,
+      "weight_kg": 0.4
+    },
+    "quantity": 2500,
+    "unit": "box",
+    "reference_unit_price": 39.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 12,
+    "sku_code": "PKG-112",
+    "description": "5-ply RSC box, BC-flute, 450x350x300mm, 2-colour print",
+    "category": "printed_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "450x350x300",
+      "gsm": 190,
+      "printed": true,
+      "weight_kg": 0.7
+    },
+    "quantity": 2000,
+    "unit": "box",
+    "reference_unit_price": 72.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 13,
+    "sku_code": "PKG-113",
+    "description": "5-ply RSC box, BC-flute, 500x500x400mm, 2-colour print",
+    "category": "printed_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "500x500x400",
+      "gsm": 190,
+      "printed": true,
+      "weight_kg": 0.95
+    },
+    "quantity": 1500,
+    "unit": "box",
+    "reference_unit_price": 92.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 14,
+    "sku_code": "PKG-114",
+    "description": "3-ply document/file box, B-flute, 320x260x140mm, plain kraft",
+    "category": "doc_mailer",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "320x260x140",
+      "gsm": 125,
+      "printed": false,
+      "weight_kg": 0.26
+    },
+    "quantity": 4000,
+    "unit": "box",
+    "reference_unit_price": 24.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 15,
+    "sku_code": "PKG-115",
+    "description": "3-ply mailer box, B-flute, 300x230x100mm, plain kraft",
+    "category": "doc_mailer",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "300x230x100",
+      "gsm": 130,
+      "printed": false,
+      "weight_kg": 0.2
+    },
+    "quantity": 6000,
+    "unit": "box",
+    "reference_unit_price": 19.5,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 16,
+    "sku_code": "PKG-116",
+    "description": "5-ply heavy carton, BC-flute, 550x400x350mm, plain kraft",
+    "category": "heavy_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "550x400x350",
+      "gsm": 210,
+      "printed": false,
+      "weight_kg": 1.05
+    },
+    "quantity": 1200,
+    "unit": "box",
+    "reference_unit_price": 105.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 17,
+    "sku_code": "PKG-117",
+    "description": "5-ply heavy carton, BC-flute, 600x500x450mm, plain kraft",
+    "category": "heavy_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "600x500x450",
+      "gsm": 220,
+      "printed": false,
+      "weight_kg": 1.35
+    },
+    "quantity": 1000,
+    "unit": "box",
+    "reference_unit_price": 128.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 18,
+    "sku_code": "PKG-118",
+    "description": "3-ply small parts box, B-flute, 150x100x100mm, plain kraft",
+    "category": "small_parts_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "150x100x100",
+      "gsm": 110,
+      "printed": false,
+      "weight_kg": 0.08
+    },
+    "quantity": 8000,
+    "unit": "box",
+    "reference_unit_price": 9.5,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 19,
+    "sku_code": "PKG-119",
+    "description": "3-ply small parts box, B-flute, 200x150x150mm, plain kraft",
+    "category": "small_parts_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "200x150x150",
+      "gsm": 110,
+      "printed": false,
+      "weight_kg": 0.13
+    },
+    "quantity": 7000,
+    "unit": "box",
+    "reference_unit_price": 13.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 20,
+    "sku_code": "PKG-120",
+    "description": "5-ply bulk carton, BC-flute, 650x450x400mm, plain kraft",
+    "category": "heavy_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "650x450x400",
+      "gsm": 220,
+      "printed": false,
+      "weight_kg": 1.45
+    },
+    "quantity": 900,
+    "unit": "box",
+    "reference_unit_price": 138.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 21,
+    "sku_code": "PKG-121",
+    "description": "3-ply flat-pack die-cut sheet, B-flute, 400x300mm",
+    "category": "flatpack_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "400x300",
+      "gsm": 140,
+      "printed": false,
+      "weight_kg": 0.18
+    },
+    "quantity": 5000,
+    "unit": "sheet",
+    "reference_unit_price": 16.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 22,
+    "sku_code": "PKG-122",
+    "description": "5-ply flat-pack die-cut sheet, BC-flute, 500x400mm",
+    "category": "flatpack_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "500x400",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.32
+    },
+    "quantity": 3000,
+    "unit": "sheet",
+    "reference_unit_price": 29.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 23,
+    "sku_code": "PKG-201",
+    "description": "E-commerce self-locking mailer box, C-flute, 350x250x100mm, 1-colour brand print, auto-bottom lock",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "C",
+      "dimensions_mm": "350x250x100",
+      "gsm": 150,
+      "printed": true,
+      "weight_kg": 0.28
+    },
+    "quantity": 10000,
+    "unit": "box",
+    "reference_unit_price": 32.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 24,
+    "sku_code": "PKG-202",
+    "description": "Automated case-erector RSC, 5-ply BC-flute, 500x350x300mm, packline-compatible (+/-1mm glue-flap tolerance)",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "500x350x300",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.8
+    },
+    "quantity": 6000,
+    "unit": "box",
+    "reference_unit_price": 89.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 25,
+    "sku_code": "PKG-203",
+    "description": "Retail-ready packaging tray with perforated tear-strip, 3-ply B-flute, 400x300x150mm, printed",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "400x300x150",
+      "gsm": 150,
+      "printed": true,
+      "weight_kg": 0.42
+    },
+    "quantity": 4000,
+    "unit": "box",
+    "reference_unit_price": 46.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 26,
+    "sku_code": "PKG-204",
+    "description": "Pallet corner boards / edge protectors, 2mm triple-wall, 50x50x1000mm L-profile",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "-",
+      "dimensions_mm": "50x50x1000",
+      "gsm": 300,
+      "printed": false,
+      "weight_kg": 0.3
+    },
+    "quantity": 2000,
+    "unit": "piece",
+    "reference_unit_price": 38.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 27,
+    "sku_code": "PKG-205",
+    "description": "Void-fill dunnage pad, honeycomb corrugated, 300x300x20mm",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 1,
+      "flute": "-",
+      "dimensions_mm": "300x300x20",
+      "gsm": 90,
+      "printed": false,
+      "weight_kg": 0.05
+    },
+    "quantity": 15000,
+    "unit": "piece",
+    "reference_unit_price": 6.5,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 28,
+    "sku_code": "PKG-206",
+    "description": "Insulated cold-chain box with EPE liner, 5-ply BC-flute, 400x300x300mm",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "400x300x300",
+      "gsm": 200,
+      "printed": false,
+      "weight_kg": 0.95
+    },
+    "quantity": 1500,
+    "unit": "box",
+    "reference_unit_price": 145.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 29,
+    "sku_code": "PKG-207",
+    "description": "Heavy-duty export carton, 7-ply triple-wall, 600x500x500mm, ECT-48 rated",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "600x500x500",
+      "gsm": 280,
+      "printed": false,
+      "weight_kg": 2.1
+    },
+    "quantity": 500,
+    "unit": "box",
+    "reference_unit_price": 320.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 30,
+    "sku_code": "PKG-208",
+    "description": "Custom die-cut POS display box, 3-ply B-flute, 500x400x600mm, full-colour litho-laminated print",
+    "category": "specialty",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "500x400x600",
+      "gsm": 160,
+      "printed": true,
+      "weight_kg": 0.75
+    },
+    "quantity": 800,
+    "unit": "box",
+    "reference_unit_price": 210.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 31,
+    "sku_code": "PKG-301",
+    "description": "3-ply RSC box, B-flute, 150x100x75mm, plain kraft, min 18 BF - small personal-care/accessory shipments",
+    "category": "fmcg_ecom_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "150x100x75",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.09,
+      "min_bf": 18
+    },
+    "quantity": 5000,
+    "unit": "box",
+    "reference_unit_price": 9.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 32,
+    "sku_code": "PKG-302",
+    "description": "3-ply RSC box, B-flute, 250x150x100mm, plain kraft, min 18 BF - cosmetics and packaged-food products",
+    "category": "fmcg_ecom_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "250x150x100",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.16,
+      "min_bf": 18
+    },
+    "quantity": 10000,
+    "unit": "box",
+    "reference_unit_price": 17.5,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 33,
+    "sku_code": "PKG-303",
+    "description": "3-ply RSC box, B-flute, 250x200x100mm, plain kraft, min 18 BF - compact D2C shipments",
+    "category": "fmcg_ecom_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "250x200x100",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.18,
+      "min_bf": 18
+    },
+    "quantity": 10000,
+    "unit": "box",
+    "reference_unit_price": 19.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 34,
+    "sku_code": "PKG-304",
+    "description": "3-ply RSC box, B-flute, 300x200x100mm, plain kraft, min 18 BF - lightweight FMCG multipacks",
+    "category": "fmcg_ecom_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "300x200x100",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.19,
+      "min_bf": 18
+    },
+    "quantity": 12000,
+    "unit": "box",
+    "reference_unit_price": 20.5,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 35,
+    "sku_code": "PKG-305",
+    "description": "3-ply RSC box, B-flute, 350x250x150mm, plain kraft, min 18 BF - personal-care and household-product orders",
+    "category": "fmcg_ecom_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "350x250x150",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.34,
+      "min_bf": 18
+    },
+    "quantity": 15000,
+    "unit": "box",
+    "reference_unit_price": 30.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 36,
+    "sku_code": "PKG-306",
+    "description": "3-ply RSC box, B-flute, 400x300x150mm, plain kraft, min 18 BF - lightweight FMCG assortment orders",
+    "category": "fmcg_ecom_3ply",
+    "spec_attributes": {
+      "ply": 3,
+      "flute": "B",
+      "dimensions_mm": "400x300x150",
+      "gsm": 150,
+      "printed": false,
+      "weight_kg": 0.30,
+      "min_bf": 18
+    },
+    "quantity": 12000,
+    "unit": "box",
+    "reference_unit_price": 29.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 37,
+    "sku_code": "PKG-307",
+    "description": "5-ply RSC box, BC-flute, 300x200x150mm, plain kraft, min 18 BF - heavier FMCG secondary packaging",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "300x200x150",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.42,
+      "min_bf": 18
+    },
+    "quantity": 20000,
+    "unit": "box",
+    "reference_unit_price": 46.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 38,
+    "sku_code": "PKG-308",
+    "description": "5-ply RSC box, BC-flute, 350x250x200mm, plain kraft, min 18 BF - household and personal-care products",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "350x250x200",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.58,
+      "min_bf": 18
+    },
+    "quantity": 18000,
+    "unit": "box",
+    "reference_unit_price": 62.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 39,
+    "sku_code": "PKG-309",
+    "description": "5-ply RSC box, BC-flute, 400x300x200mm, plain kraft, min 18 BF - FMCG master cartons",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "400x300x200",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.68,
+      "min_bf": 18
+    },
+    "quantity": 25000,
+    "unit": "box",
+    "reference_unit_price": 72.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 40,
+    "sku_code": "PKG-310",
+    "description": "5-ply RSC box, BC-flute, 400x300x250mm, plain kraft, min 18 BF - retail replenishment and e-commerce bulk orders",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "400x300x250",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.75,
+      "min_bf": 18
+    },
+    "quantity": 20000,
+    "unit": "box",
+    "reference_unit_price": 78.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 41,
+    "sku_code": "PKG-311",
+    "description": "5-ply RSC box, BC-flute, 450x300x250mm, plain kraft, min 18 BF - mixed FMCG SKU shipments",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "450x300x250",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.80,
+      "min_bf": 18
+    },
+    "quantity": 18000,
+    "unit": "box",
+    "reference_unit_price": 84.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 42,
+    "sku_code": "PKG-312",
+    "description": "5-ply RSC box, BC-flute, 500x350x250mm, plain kraft, min 18 BF - larger master cartons",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "500x350x250",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 0.92,
+      "min_bf": 18
+    },
+    "quantity": 20000,
+    "unit": "box",
+    "reference_unit_price": 96.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 43,
+    "sku_code": "PKG-313",
+    "description": "5-ply RSC box, BC-flute, 500x400x300mm, plain kraft, min 18 BF - FMCG distribution and warehouse movement",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "500x400x300",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 1.02,
+      "min_bf": 18
+    },
+    "quantity": 15000,
+    "unit": "box",
+    "reference_unit_price": 106.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 44,
+    "sku_code": "PKG-314",
+    "description": "5-ply RSC box, BC-flute, 600x400x300mm, plain kraft, min 18 BF - bulk secondary packaging",
+    "category": "fmcg_ecom_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "600x400x300",
+      "gsm": 190,
+      "printed": false,
+      "weight_kg": 1.15,
+      "min_bf": 18
+    },
+    "quantity": 15000,
+    "unit": "box",
+    "reference_unit_price": 118.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 45,
+    "sku_code": "PKG-315",
+    "description": "5-ply heavy carton, BC-flute, 600x450x350mm, plain kraft, min 20 BF - heavier FMCG products",
+    "category": "fmcg_master_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "600x450x350",
+      "gsm": 210,
+      "printed": false,
+      "weight_kg": 1.28,
+      "min_bf": 20
+    },
+    "quantity": 12000,
+    "unit": "box",
+    "reference_unit_price": 132.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 46,
+    "sku_code": "PKG-316",
+    "description": "5-ply heavy carton, BC-flute, 700x500x400mm, plain kraft, min 20 BF - large master cartons",
+    "category": "fmcg_master_5ply",
+    "spec_attributes": {
+      "ply": 5,
+      "flute": "BC",
+      "dimensions_mm": "700x500x400",
+      "gsm": 210,
+      "printed": false,
+      "weight_kg": 1.55,
+      "min_bf": 20
+    },
+    "quantity": 8000,
+    "unit": "box",
+    "reference_unit_price": 158.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 47,
+    "sku_code": "PKG-317",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 400x300x250mm, plain kraft, min 20 BF - heavy FMCG distribution loads",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "400x300x250",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 1.05,
+      "min_bf": 20
+    },
+    "quantity": 10000,
+    "unit": "box",
+    "reference_unit_price": 135.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 48,
+    "sku_code": "PKG-318",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 500x350x300mm, plain kraft, min 20 BF - heavy household and packaged-goods cartons",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "500x350x300",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 1.30,
+      "min_bf": 20
+    },
+    "quantity": 10000,
+    "unit": "box",
+    "reference_unit_price": 158.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 49,
+    "sku_code": "PKG-319",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 500x400x350mm, plain kraft, min 20 BF - high-load master cartons",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "500x400x350",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 1.48,
+      "min_bf": 20
+    },
+    "quantity": 8000,
+    "unit": "box",
+    "reference_unit_price": 172.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 50,
+    "sku_code": "PKG-320",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 600x400x350mm, plain kraft, min 20 BF - heavy FMCG secondary transportation",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "600x400x350",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 1.60,
+      "min_bf": 20
+    },
+    "quantity": 8000,
+    "unit": "box",
+    "reference_unit_price": 185.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 51,
+    "sku_code": "PKG-321",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 600x450x400mm, plain kraft, min 20 BF - bulk warehouse and distributor movement",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "600x450x400",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 1.75,
+      "min_bf": 20
+    },
+    "quantity": 6000,
+    "unit": "box",
+    "reference_unit_price": 198.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 52,
+    "sku_code": "PKG-322",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 700x500x400mm, plain kraft, min 20 BF - heavy master-carton applications",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "700x500x400",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 1.95,
+      "min_bf": 20
+    },
+    "quantity": 5000,
+    "unit": "box",
+    "reference_unit_price": 218.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 53,
+    "sku_code": "PKG-323",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 800x500x400mm, plain kraft, min 20 BF - large-volume FMCG shipments",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "800x500x400",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 2.15,
+      "min_bf": 20
+    },
+    "quantity": 4000,
+    "unit": "box",
+    "reference_unit_price": 240.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 54,
+    "sku_code": "PKG-324",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 800x600x450mm, plain kraft, min 20 BF - heavy bulk transportation",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "800x600x450",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 2.45,
+      "min_bf": 20
+    },
+    "quantity": 3000,
+    "unit": "box",
+    "reference_unit_price": 268.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 55,
+    "sku_code": "PKG-325",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 1000x600x500mm, plain kraft, min 20 BF - oversized master cartons and palletized distribution",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "1000x600x500",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 2.85,
+      "min_bf": 20
+    },
+    "quantity": 2000,
+    "unit": "box",
+    "reference_unit_price": 305.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  },
+  {
+    "line_no": 56,
+    "sku_code": "PKG-326",
+    "description": "7-ply heavy-duty carton, BC/BC-flute, 1200x800x600mm, plain kraft, min 20 BF - heavy-duty bulk FMCG transportation",
+    "category": "fmcg_master_7ply",
+    "spec_attributes": {
+      "ply": 7,
+      "flute": "BC/BC",
+      "dimensions_mm": "1200x800x600",
+      "gsm": 260,
+      "printed": false,
+      "weight_kg": 3.40,
+      "min_bf": 20
+    },
+    "quantity": 1500,
+    "unit": "box",
+    "reference_unit_price": 360.0,
+    "reference_currency": "INR",
+    "reference_period_label": "FY2025"
+  }
+]
