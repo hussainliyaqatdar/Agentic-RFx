@@ -492,6 +492,15 @@ function ResponsesTab({
   }
 
   const hasAnyExtraction = comparison?.rows.some((r) => Object.values(r.cells).some((c) => c != null))
+  // Every vendor can reach EXTRACTED (or ERROR) while still producing zero matched
+  // cells - e.g. this RFx's line items don't correspond to anything the vendors were
+  // actually sent. Without this, the tab falls back to the exact same "hasn't been
+  // processed yet" copy and button whether extraction never ran or already ran and
+  // found nothing, which reads as the run silently failing/reverting.
+  const allVendorsTerminal =
+    rfx.vendors.length > 0 &&
+    rfx.vendors.every((v) => v.response_status === 'extracted' || v.response_status === 'error')
+  const extractedWithNoMatches = !isExtracting && allVendorsTerminal && !hasAnyExtraction
 
   return (
     <div className="space-y-4">
@@ -500,16 +509,31 @@ function ResponsesTab({
 
       {!loading && !hasAnyExtraction && (
         <div className="rounded-xl border border-dashed border-border-strong bg-white px-5 py-10 text-center">
-          <p className="mb-3 text-sm text-text-secondary">
-            Vendor responses haven't been processed yet. This runs the real extraction pipeline (worker +
-            evaluator agents) against each vendor's documents - real AI calls, takes a couple of minutes.
-          </p>
-          {isExtracting ? (
-            <p className="text-sm font-medium text-text-primary">Still processing vendor responses…</p>
+          {extractedWithNoMatches ? (
+            <>
+              <p className="mb-3 text-sm text-danger-text">
+                Extraction completed for all {rfx.vendors.length} vendors, but none of their quoted items
+                matched this RFx's line items. Double-check that these line items are actually what vendors
+                were sent - re-running won't help if the mismatch is in the data itself.
+              </p>
+              <Button onClick={handleExtract} disabled={extracting} variant="secondary">
+                {extracting ? 'Re-running…' : 'Re-run extraction'}
+              </Button>
+            </>
           ) : (
-            <Button onClick={handleExtract} disabled={extracting}>
-              {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
-            </Button>
+            <>
+              <p className="mb-3 text-sm text-text-secondary">
+                Vendor responses haven't been processed yet. This runs the real extraction pipeline (worker +
+                evaluator agents) against each vendor's documents - real AI calls, takes a couple of minutes.
+              </p>
+              {isExtracting ? (
+                <p className="text-sm font-medium text-text-primary">Still processing vendor responses…</p>
+              ) : (
+                <Button onClick={handleExtract} disabled={extracting}>
+                  {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
+                </Button>
+              )}
+            </>
           )}
         </div>
       )}
