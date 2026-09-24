@@ -216,7 +216,10 @@ def copilot_turn(payload: CopilotTurnRequest, session: Session = Depends(get_ses
     history = [{"role": m.role.value, "content": m.content} for m in prior]
     current_draft = RfxDraft.model_validate(chat_session.draft_state) if chat_session.draft_state else None
 
-    result = run_copilot_turn(session, history, current_draft, payload.message, label=f"copilot:{chat_session.id}")
+    try:
+        result = run_copilot_turn(session, history, current_draft, payload.message, label=f"copilot:{chat_session.id}")
+    except Exception as exc:  # surface the provider's own error instead of an opaque 500
+        raise HTTPException(status_code=502, detail=f"Gemini call failed: {exc}") from exc
 
     session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.USER, content=payload.message))
     session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.ASSISTANT, content=result.reply))
@@ -403,6 +406,32 @@ class AnalystTurnRequest(BaseModel):
     message: str
 
 
+@router.get("/rfx/{rfx_id}/analyst/sessions/latest")
+def get_latest_analyst_session(rfx_id: int, session: Session = Depends(get_session)):
+    """The most recent RFx Analyst conversation for this specific RFx, so
+    reopening the drawer resumes where the buyer left off instead of starting
+    over. Scoped to this RFx (unlike the co-pilot's buyer-wide resume) since an
+    analyst session only ever makes sense against one RFx's data."""
+    if not session.get(Rfx, rfx_id):
+        raise HTTPException(status_code=404, detail="RFx not found")
+
+    chat_session = session.exec(
+        select(ChatSession)
+        .where(ChatSession.session_type == ChatSessionType.ANALYST, ChatSession.rfx_id == rfx_id)
+        .order_by(ChatSession.created_at.desc())
+    ).first()
+    if not chat_session:
+        return None
+
+    messages = session.exec(
+        select(ChatMessage).where(ChatMessage.session_id == chat_session.id).order_by(ChatMessage.created_at)
+    ).all()
+    return {
+        "session_id": chat_session.id,
+        "messages": [{"role": m.role.value, "content": m.content} for m in messages[-10:]],
+    }
+
+
 @router.post("/rfx/{rfx_id}/analyst/turn")
 def analyst_turn(rfx_id: int, payload: AnalystTurnRequest, session: Session = Depends(get_session)):
     rfx = session.get(Rfx, rfx_id)
@@ -428,7 +457,10 @@ def analyst_turn(rfx_id: int, payload: AnalystTurnRequest, session: Session = De
     questionnaire = build_questionnaire_data(session, rfx_id)
     reference_context = format_analyst_context(rfx, comparison, questionnaire)
 
-    result = run_analyst_turn(reference_context, history, payload.message, label=f"analyst:{chat_session.id}")
+    try:
+        result = run_analyst_turn(reference_context, history, payload.message, label=f"analyst:{chat_session.id}")
+    except Exception as exc:  # surface the provider's own error instead of an opaque 500
+        raise HTTPException(status_code=502, detail=f"Gemini call failed: {exc}") from exc
 
     session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.USER, content=payload.message))
     session.add(ChatMessage(session_id=chat_session.id, role=ChatRole.ASSISTANT, content=result.reply))
