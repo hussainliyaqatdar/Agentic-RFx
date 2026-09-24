@@ -1,13 +1,14 @@
 """Tracks real token usage and spend across Gemini calls within this process, and
 refuses to make further calls once a session budget is exceeded. This exists
-specifically because gemini-3.8-flash billing is real money, not a quota to shrug
-off - every call's actual cost (from the API's own usage_metadata, not an estimate)
-is logged as it happens.
+because billing is real money, not a quota to shrug off - every call's actual
+cost (from the API's own usage_metadata, not an estimate) is logged as it happens.
 """
 
-# Introductory pricing through end of 2026 - see gemini_client.py callers for source.
-PRICE_PER_M_INPUT_USD = 0.75
-PRICE_PER_M_OUTPUT_USD = 3.75
+# Pricing for gemini-3.1-flash-lite (per ai.google.dev/gemini-api/docs/pricing).
+# Update these together with GEMINI_MODEL in .env - they're specific to that
+# model, not a general Gemini rate.
+PRICE_PER_M_INPUT_USD = 0.25
+PRICE_PER_M_OUTPUT_USD = 1.50
 
 SESSION_BUDGET_USD = 1.00
 
