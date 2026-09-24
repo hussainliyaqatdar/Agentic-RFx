@@ -96,6 +96,75 @@ def get_rfx(rfx_id: int, session: Session = Depends(get_session)):
     }
 
 
+class LineItemUpdateRequest(BaseModel):
+    description: Optional[str] = None
+    spec_summary: Optional[str] = None
+    quantity: Optional[float] = None
+    unit: Optional[str] = None
+
+
+@router.patch("/rfx/{rfx_id}/line-items/{line_item_id}")
+def update_line_item(
+    rfx_id: int, line_item_id: int, payload: LineItemUpdateRequest, session: Session = Depends(get_session)
+):
+    rfx = session.get(Rfx, rfx_id)
+    if not rfx:
+        raise HTTPException(status_code=404, detail="RFx not found")
+    if rfx.status != RfxStatus.DRAFT:
+        raise HTTPException(status_code=400, detail="Line items can only be edited while the RFx is still a draft")
+
+    line_item = session.get(RfxLineItem, line_item_id)
+    if not line_item or line_item.rfx_id != rfx_id:
+        raise HTTPException(status_code=404, detail="Line item not found")
+
+    if payload.description is not None:
+        line_item.description = payload.description
+    if payload.spec_summary is not None:
+        line_item.spec_attributes = {"summary": payload.spec_summary}
+    if payload.quantity is not None:
+        line_item.quantity = payload.quantity
+    if payload.unit is not None:
+        line_item.unit = payload.unit
+
+    session.add(line_item)
+    session.commit()
+    session.refresh(line_item)
+    return line_item.model_dump()
+
+
+class LineItemCreateRequest(BaseModel):
+    description: str
+    spec_summary: Optional[str] = None
+    quantity: float
+    unit: str
+
+
+@router.post("/rfx/{rfx_id}/line-items")
+def add_line_item(rfx_id: int, payload: LineItemCreateRequest, session: Session = Depends(get_session)):
+    rfx = session.get(Rfx, rfx_id)
+    if not rfx:
+        raise HTTPException(status_code=404, detail="RFx not found")
+    if rfx.status != RfxStatus.DRAFT:
+        raise HTTPException(status_code=400, detail="Line items can only be added while the RFx is still a draft")
+
+    existing = session.exec(select(RfxLineItem).where(RfxLineItem.rfx_id == rfx_id)).all()
+    line_no = max((li.line_no for li in existing), default=0) + 1
+
+    line_item = RfxLineItem(
+        rfx_id=rfx_id,
+        line_no=line_no,
+        sku_code=f"NEW-{rfx_id}-{line_no:03d}",
+        description=payload.description,
+        spec_attributes={"summary": payload.spec_summary} if payload.spec_summary else {},
+        quantity=payload.quantity,
+        unit=payload.unit,
+    )
+    session.add(line_item)
+    session.commit()
+    session.refresh(line_item)
+    return line_item.model_dump()
+
+
 class CopilotTurnRequest(BaseModel):
     session_id: Optional[int] = None
     message: str
@@ -220,6 +289,13 @@ def extract_rfx(rfx_id: int, session: Session = Depends(get_session)):
     rfx = session.get(Rfx, rfx_id)
     if not rfx:
         raise HTTPException(status_code=404, detail="RFx not found")
+    already_running = session.exec(
+        select(RfxVendor).where(
+            RfxVendor.rfx_id == rfx_id, RfxVendor.response_status == VendorResponseStatus.EXTRACTING
+        )
+    ).first()
+    if already_running:
+        raise HTTPException(status_code=409, detail="Extraction is already in progress for this RFx")
     try:
         result = run_and_persist_extraction(session, rfx_id)
     except ValueError as exc:

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnalystChatDrawer } from '../components/AnalystChatDrawer'
 import { AwardPanel } from '../components/AwardPanel'
-import { Button } from '../components/Button'
+import { Button, IconButton } from '../components/Button'
 import { ComparisonGrid } from '../components/ComparisonGrid'
-import { ChevronLeftIcon, SparkleIcon } from '../components/icons'
+import { CheckIcon, ChevronLeftIcon, PencilIcon, PlusIcon, SparkleIcon, XIcon } from '../components/icons'
 import { RfxStatusPill } from '../components/StatusPill'
 import { VendorDetailDrawer } from '../components/VendorDetailDrawer'
 import { rfxApi, type ComparisonData, type ProposedAwardLine, type RfxDetail } from '../lib/api'
@@ -86,15 +86,19 @@ export default function RfxDetailPage() {
       </div>
 
       {tab === 'review' ? (
-        <ReviewTab rfx={rfx} />
+        <ReviewTab rfx={rfx} onUpdated={refresh} />
       ) : (
-        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} />
+        <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} onRefresh={refresh} />
       )}
     </div>
   )
 }
 
-function ReviewTab({ rfx }: { rfx: RfxDetail }) {
+function ReviewTab({ rfx, onUpdated }: { rfx: RfxDetail; onUpdated: () => void }) {
+  const canEdit = rfx.status === 'draft'
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [adding, setAdding] = useState(false)
+
   return (
     <div className="space-y-6">
       <section className="rounded-xl border border-border-default bg-white p-5">
@@ -117,9 +121,20 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
       </section>
 
       <section>
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-          Line items ({rfx.line_items.length})
-        </p>
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+            Line items ({rfx.line_items.length})
+          </p>
+          {canEdit && !adding && (
+            <button
+              onClick={() => setAdding(true)}
+              className="flex items-center gap-1 text-xs font-medium text-brand-blue hover:underline"
+            >
+              <PlusIcon width={14} height={14} />
+              Add line item
+            </button>
+          )}
+        </div>
         <div className="overflow-hidden rounded-xl border border-border-default bg-white">
           <table className="w-full text-sm">
             <thead>
@@ -129,24 +144,35 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
                 <th className="px-4 py-2.5">Spec</th>
                 <th className="px-4 py-2.5">Qty</th>
                 <th className="px-4 py-2.5">Unit</th>
+                {canEdit && <th className="px-4 py-2.5" />}
               </tr>
             </thead>
             <tbody>
               {rfx.line_items.map((li) => (
-                <tr key={li.id} className="border-b border-border-default text-text-primary last:border-0">
-                  <td className="px-4 py-2.5 font-mono text-xs">
-                    {li.sku_code.startsWith('NEW-') ? (
-                      <span className="rounded bg-warning-bg px-1.5 py-0.5 text-warning-text">new</span>
-                    ) : (
-                      li.sku_code
-                    )}
-                  </td>
-                  <td className="px-4 py-2.5">{li.description}</td>
-                  <td className="px-4 py-2.5 text-text-secondary">{formatSpec(li.spec_attributes)}</td>
-                  <td className="px-4 py-2.5">{li.quantity.toLocaleString('en-IN')}</td>
-                  <td className="px-4 py-2.5 text-text-secondary">{li.unit}</td>
-                </tr>
+                <LineItemRow
+                  key={li.id}
+                  rfxId={rfx.id}
+                  item={li}
+                  canEdit={canEdit}
+                  editing={editingId === li.id}
+                  onStartEdit={() => setEditingId(li.id)}
+                  onCancelEdit={() => setEditingId(null)}
+                  onSaved={() => {
+                    setEditingId(null)
+                    onUpdated()
+                  }}
+                />
               ))}
+              {adding && (
+                <NewLineItemRow
+                  rfxId={rfx.id}
+                  onCancel={() => setAdding(false)}
+                  onAdded={() => {
+                    setAdding(false)
+                    onUpdated()
+                  }}
+                />
+              )}
             </tbody>
           </table>
         </div>
@@ -168,7 +194,237 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
   )
 }
 
-function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number; onAwarded: () => void }) {
+function LineItemRow({
+  rfxId,
+  item,
+  canEdit,
+  editing,
+  onStartEdit,
+  onCancelEdit,
+  onSaved,
+}: {
+  rfxId: number
+  item: RfxDetail['line_items'][number]
+  canEdit: boolean
+  editing: boolean
+  onStartEdit: () => void
+  onCancelEdit: () => void
+  onSaved: () => void
+}) {
+  const [description, setDescription] = useState(item.description)
+  const [spec, setSpec] = useState(formatSpec(item.spec_attributes))
+  const [quantity, setQuantity] = useState(String(item.quantity))
+  const [unit, setUnit] = useState(item.unit)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (editing) {
+      setDescription(item.description)
+      setSpec(formatSpec(item.spec_attributes))
+      setQuantity(String(item.quantity))
+      setUnit(item.unit)
+      setError(null)
+    }
+  }, [editing, item])
+
+  async function handleSave() {
+    setSaving(true)
+    setError(null)
+    try {
+      await rfxApi.updateLineItem(rfxId, item.id, {
+        description,
+        spec_summary: spec,
+        quantity: Number(quantity),
+        unit,
+      })
+      onSaved()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not save')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const skuCell = (
+    <td className="px-4 py-2.5 align-top font-mono text-xs">
+      {item.sku_code.startsWith('NEW-') ? (
+        <span className="rounded bg-warning-bg px-1.5 py-0.5 text-warning-text">new</span>
+      ) : (
+        item.sku_code
+      )}
+    </td>
+  )
+
+  if (!editing) {
+    return (
+      <tr className="border-b border-border-default text-text-primary last:border-0">
+        {skuCell}
+        <td className="px-4 py-2.5">{item.description}</td>
+        <td className="px-4 py-2.5 text-text-secondary">{formatSpec(item.spec_attributes)}</td>
+        <td className="px-4 py-2.5">{item.quantity.toLocaleString('en-IN')}</td>
+        <td className="px-4 py-2.5 text-text-secondary">{item.unit}</td>
+        {canEdit && (
+          <td className="px-4 py-2.5">
+            <IconButton onClick={onStartEdit} aria-label="Edit line item">
+              <PencilIcon width={14} height={14} />
+            </IconButton>
+          </td>
+        )}
+      </tr>
+    )
+  }
+
+  return (
+    <tr className="border-b border-border-default bg-bg-hover text-text-primary last:border-0">
+      {skuCell}
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={spec}
+          onChange={(e) => setSpec(e.target.value)}
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          type="number"
+          min={0}
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          className="w-24 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          className="w-20 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <div className="flex items-center gap-1.5">
+          <IconButton onClick={handleSave} disabled={saving} aria-label="Save">
+            <CheckIcon width={14} height={14} />
+          </IconButton>
+          <IconButton onClick={onCancelEdit} disabled={saving} aria-label="Cancel">
+            <XIcon width={14} height={14} />
+          </IconButton>
+        </div>
+        {error && <p className="mt-1 text-xs text-danger-text">{error}</p>}
+      </td>
+    </tr>
+  )
+}
+
+function NewLineItemRow({
+  rfxId,
+  onCancel,
+  onAdded,
+}: {
+  rfxId: number
+  onCancel: () => void
+  onAdded: () => void
+}) {
+  const [description, setDescription] = useState('')
+  const [spec, setSpec] = useState('')
+  const [quantity, setQuantity] = useState('')
+  const [unit, setUnit] = useState('box')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleSave() {
+    if (!description.trim() || !unit.trim() || !quantity || Number(quantity) <= 0) {
+      setError('Description, a positive quantity, and unit are required')
+      return
+    }
+    setSaving(true)
+    setError(null)
+    try {
+      await rfxApi.addLineItem(rfxId, {
+        description,
+        spec_summary: spec || undefined,
+        quantity: Number(quantity),
+        unit,
+      })
+      onAdded()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not add line item')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <tr className="border-b border-border-default bg-bg-hover text-text-primary last:border-0">
+      <td className="px-4 py-2.5 align-top font-mono text-xs">
+        <span className="rounded bg-warning-bg px-1.5 py-0.5 text-warning-text">new</span>
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={spec}
+          onChange={(e) => setSpec(e.target.value)}
+          placeholder="Spec (optional)"
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          type="number"
+          min={0}
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          placeholder="Qty"
+          className="w-24 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          className="w-20 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <div className="flex items-center gap-1.5">
+          <IconButton onClick={handleSave} disabled={saving} aria-label="Save">
+            <CheckIcon width={14} height={14} />
+          </IconButton>
+          <IconButton onClick={onCancel} disabled={saving} aria-label="Cancel">
+            <XIcon width={14} height={14} />
+          </IconButton>
+        </div>
+        {error && <p className="mt-1 text-xs text-danger-text">{error}</p>}
+      </td>
+    </tr>
+  )
+}
+
+function ResponsesTab({
+  rfx,
+  rfxId,
+  onAwarded,
+  onRefresh,
+}: {
+  rfx: RfxDetail
+  rfxId: number
+  onAwarded: () => void
+  onRefresh: () => void
+}) {
   const [comparison, setComparison] = useState<ComparisonData | null>(null)
   const [loading, setLoading] = useState(true)
   const [extracting, setExtracting] = useState(false)
@@ -177,6 +433,9 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
   const [chatOpen, setChatOpen] = useState(false)
   const [awardPrefill, setAwardPrefill] = useState<ProposedAwardLine[] | null>(null)
   const [awardOpen, setAwardOpen] = useState(false)
+
+  const isExtracting = rfx.vendors.some((v) => v.response_status === 'extracting')
+  const wasExtractingRef = useRef(isExtracting)
 
   function loadComparison() {
     setLoading(true)
@@ -189,6 +448,27 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
 
   useEffect(loadComparison, [rfxId])
 
+  // Another tab, or a page reload mid-run, may have left extraction in
+  // progress server-side - poll until it's done instead of showing a stale button,
+  // and keep the grid's cells current as each vendor finishes.
+  useEffect(() => {
+    if (!isExtracting) return
+    const interval = setInterval(() => {
+      onRefresh()
+      loadComparison()
+    }, 4000)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExtracting, onRefresh])
+
+  useEffect(() => {
+    if (wasExtractingRef.current && !isExtracting) {
+      loadComparison()
+    }
+    wasExtractingRef.current = isExtracting
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExtracting])
+
   async function handleExtract() {
     setExtracting(true)
     setError(null)
@@ -197,6 +477,7 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
       loadComparison()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Extraction failed')
+      onRefresh()
     } finally {
       setExtracting(false)
     }
@@ -223,30 +504,51 @@ function ResponsesTab({ rfx, rfxId, onAwarded }: { rfx: RfxDetail; rfxId: number
             Vendor responses haven't been processed yet. This runs the real extraction pipeline (worker +
             evaluator agents) against each vendor's documents - real AI calls, takes a couple of minutes.
           </p>
-          <Button onClick={handleExtract} disabled={extracting}>
-            {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
-          </Button>
+          {isExtracting ? (
+            <p className="text-sm font-medium text-text-primary">Still processing vendor responses…</p>
+          ) : (
+            <Button onClick={handleExtract} disabled={extracting}>
+              {extracting ? 'Processing vendor responses…' : 'Process vendor responses'}
+            </Button>
+          )}
         </div>
       )}
 
       {!loading && hasAnyExtraction && comparison && (
         <>
-          <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
-
-          <div className="flex gap-3">
-            <button
-              onClick={() => setChatOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-primary hover:bg-bg-hover"
-            >
-              <SparkleIcon width={16} height={16} className="text-brand-blue" />
-              Ask the analyst chat about these responses
-            </button>
-            {rfx.status !== 'awarded' && (
-              <Button onClick={() => { setAwardPrefill(null); setAwardOpen(true) }}>
-                Award decision
-              </Button>
-            )}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-secondary">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-success-text" /> confirmed
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-warning-text" /> needs review
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm border border-success-text bg-success-bg" /> cheapest
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm border border-danger-text bg-danger-bg" /> priciest
+              </span>
+              <span>Click any price for its source and reasoning.</span>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <button
+                onClick={() => setChatOpen(true)}
+                className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-primary hover:bg-bg-hover"
+              >
+                <SparkleIcon width={16} height={16} className="text-brand-blue" />
+                Ask the analyst chat about these responses
+              </button>
+              {rfx.status !== 'awarded' && (
+                <Button onClick={() => { setAwardPrefill(null); setAwardOpen(true) }}>
+                  Award decision
+                </Button>
+              )}
+            </div>
           </div>
+
+          <ComparisonGrid data={comparison} onOpenVendor={setOpenVendorId} />
         </>
       )}
 

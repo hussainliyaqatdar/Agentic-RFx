@@ -99,10 +99,18 @@ def run_and_persist_extraction(session: Session, rfx_id: int) -> dict:
             select(ExtractedAnswer).where(ExtractedAnswer.rfx_vendor_id == rfx_vendor.id)
         ).all():
             session.delete(ans)
+        rfx_vendor.response_status = VendorResponseStatus.EXTRACTING
+        session.add(rfx_vendor)
         session.commit()
 
-        documents = _ensure_documents(session, rfx_vendor, vendor.slug)
-        output = run_pipeline_for_vendor(vendor.slug)
+        try:
+            documents = _ensure_documents(session, rfx_vendor, vendor.slug)
+            output = run_pipeline_for_vendor(vendor.slug)
+        except Exception:
+            rfx_vendor.response_status = VendorResponseStatus.ERROR
+            session.add(rfx_vendor)
+            session.commit()
+            raise
 
         line_count = 0
         for line in output["lines"]:
