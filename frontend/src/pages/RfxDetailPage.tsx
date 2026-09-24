@@ -97,6 +97,7 @@ export default function RfxDetailPage() {
 function ReviewTab({ rfx, onUpdated }: { rfx: RfxDetail; onUpdated: () => void }) {
   const canEdit = rfx.status === 'draft'
   const [editingId, setEditingId] = useState<number | null>(null)
+  const [adding, setAdding] = useState(false)
 
   return (
     <div className="space-y-6">
@@ -120,9 +121,20 @@ function ReviewTab({ rfx, onUpdated }: { rfx: RfxDetail; onUpdated: () => void }
       </section>
 
       <section>
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-          Line items ({rfx.line_items.length})
-        </p>
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+            Line items ({rfx.line_items.length})
+          </p>
+          {canEdit && !adding && (
+            <button
+              onClick={() => setAdding(true)}
+              className="flex items-center gap-1 text-xs font-medium text-brand-blue hover:underline"
+            >
+              <PlusIcon width={14} height={14} />
+              Add line item
+            </button>
+          )}
+        </div>
         <div className="overflow-hidden rounded-xl border border-border-default bg-white">
           <table className="w-full text-sm">
             <thead>
@@ -151,6 +163,16 @@ function ReviewTab({ rfx, onUpdated }: { rfx: RfxDetail; onUpdated: () => void }
                   }}
                 />
               ))}
+              {adding && (
+                <NewLineItemRow
+                  rfxId={rfx.id}
+                  onCancel={() => setAdding(false)}
+                  onAdded={() => {
+                    setAdding(false)
+                    onUpdated()
+                  }}
+                />
+              )}
             </tbody>
           </table>
         </div>
@@ -292,6 +314,97 @@ function LineItemRow({
             <CheckIcon width={14} height={14} />
           </IconButton>
           <IconButton onClick={onCancelEdit} disabled={saving} aria-label="Cancel">
+            <XIcon width={14} height={14} />
+          </IconButton>
+        </div>
+        {error && <p className="mt-1 text-xs text-danger-text">{error}</p>}
+      </td>
+    </tr>
+  )
+}
+
+function NewLineItemRow({
+  rfxId,
+  onCancel,
+  onAdded,
+}: {
+  rfxId: number
+  onCancel: () => void
+  onAdded: () => void
+}) {
+  const [description, setDescription] = useState('')
+  const [spec, setSpec] = useState('')
+  const [quantity, setQuantity] = useState('')
+  const [unit, setUnit] = useState('box')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleSave() {
+    if (!description.trim() || !unit.trim() || !quantity || Number(quantity) <= 0) {
+      setError('Description, a positive quantity, and unit are required')
+      return
+    }
+    setSaving(true)
+    setError(null)
+    try {
+      await rfxApi.addLineItem(rfxId, {
+        description,
+        spec_summary: spec || undefined,
+        quantity: Number(quantity),
+        unit,
+      })
+      onAdded()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not add line item')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <tr className="border-b border-border-default bg-bg-hover text-text-primary last:border-0">
+      <td className="px-4 py-2.5 align-top font-mono text-xs">
+        <span className="rounded bg-warning-bg px-1.5 py-0.5 text-warning-text">new</span>
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={spec}
+          onChange={(e) => setSpec(e.target.value)}
+          placeholder="Spec (optional)"
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          type="number"
+          min={0}
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          placeholder="Qty"
+          className="w-24 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          className="w-20 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <div className="flex items-center gap-1.5">
+          <IconButton onClick={handleSave} disabled={saving} aria-label="Save">
+            <CheckIcon width={14} height={14} />
+          </IconButton>
+          <IconButton onClick={onCancel} disabled={saving} aria-label="Cancel">
             <XIcon width={14} height={14} />
           </IconButton>
         </div>

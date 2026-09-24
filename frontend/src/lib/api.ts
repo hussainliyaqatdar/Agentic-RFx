@@ -71,6 +71,13 @@ export interface LineItemUpdate {
   unit?: string
 }
 
+export interface LineItemCreate {
+  description: string
+  spec_summary?: string
+  quantity: number
+  unit: string
+}
+
 export interface RfxQuestion {
   id: number
   question_no: number
@@ -241,4 +248,6 @@ export const rfxApi = {
     apiPost<{ status: string; line_items_awarded: number }>(`/rfx/${rfxId}/award`, { awards }),
   updateLineItem: (rfxId: number, lineItemId: number, payload: LineItemUpdate) =>
     apiPatch<RfxLineItem>(`/rfx/${rfxId}/line-items/${lineItemId}`, payload),
+  addLineItem: (rfxId: number, payload: LineItemCreate) =>
+    apiPost<RfxLineItem>(`/rfx/${rfxId}/line-items`, payload),
 }

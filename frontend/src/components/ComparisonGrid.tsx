@@ -14,6 +14,28 @@ function confidenceDotClass(cell: ComparisonCell) {
   return 'bg-success-text'
 }
 
+// Only flags a winner/loser when the spread is large enough to be a real
+// signal (10%+) - most rows have quotes close enough together that
+// highlighting the extremes would just be noise, not insight.
+const CLEAR_SPREAD_THRESHOLD = 0.1
+
+function priceExtremes(row: ComparisonRow, vendors: ComparisonVendorColumn[]) {
+  const priced = vendors
+    .map((v) => ({ id: v.rfx_vendor_id, price: row.cells[String(v.rfx_vendor_id)]?.unit_price_normalized }))
+    .filter((p): p is { id: number; price: number } => p.price != null)
+  const winners = new Set<number>()
+  const losers = new Set<number>()
+  if (priced.length < 2) return { winners, losers }
+  const min = Math.min(...priced.map((p) => p.price))
+  const max = Math.max(...priced.map((p) => p.price))
+  if (min <= 0 || min === max || (max - min) / min < CLEAR_SPREAD_THRESHOLD) return { winners, losers }
+  for (const p of priced) {
+    if (p.price === min) winners.add(p.id)
+    if (p.price === max) losers.add(p.id)
+  }
+  return { winners, losers }
+}
+
 interface Props {
   data: ComparisonData
   onOpenVendor: (vendorId: number) => void
@@ -44,53 +66,51 @@ export function ComparisonGrid({ data, onOpenVendor }: Props) {
             </tr>
           </thead>
           <tbody>
-            {data.rows.map((row) => (
-              <tr key={row.line_item_id} className="border-b border-border-default last:border-0 hover:bg-bg-hover">
-                <td className="sticky left-0 z-10 border-r border-border-default bg-white px-4 py-2.5 align-top">
-                  <p className="font-mono text-xs text-text-tertiary">{row.sku_code}</p>
-                  <p className="text-text-primary">{row.description}</p>
-                  <p className="text-xs text-text-secondary">
-                    {row.quantity.toLocaleString('en-IN')} {row.unit}
-                  </p>
-                </td>
-                {data.vendors.map((v) => {
-                  const cell = row.cells[String(v.rfx_vendor_id)]
-                  const price = formatPrice(cell)
-                  return (
-                    <td
-                      key={v.rfx_vendor_id}
-                      onClick={() => cell && setSelected({ row, vendor: v, cell })}
-                      className={`px-4 py-2.5 align-top ${cell ? 'cursor-pointer' : ''}`}
-                    >
-                      {cell && price != null ? (
-                        <span className="flex items-center gap-1.5">
-                          <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${confidenceDotClass(cell)}`} />
-                          <span className="text-text-primary">
-                            {cell.currency_normalized} {price}
+            {data.rows.map((row) => {
+              const { winners, losers } = priceExtremes(row, data.vendors)
+              return (
+                <tr key={row.line_item_id} className="border-b border-border-default last:border-0 hover:bg-bg-hover">
+                  <td className="sticky left-0 z-10 border-r border-border-default bg-white px-4 py-2.5 align-top">
+                    <p className="font-mono text-xs text-text-tertiary">{row.sku_code}</p>
+                    <p className="text-text-primary">{row.description}</p>
+                    <p className="text-xs text-text-secondary">
+                      {row.quantity.toLocaleString('en-IN')} {row.unit}
+                    </p>
+                  </td>
+                  {data.vendors.map((v) => {
+                    const cell = row.cells[String(v.rfx_vendor_id)]
+                    const price = formatPrice(cell)
+                    const rankClass = winners.has(v.rfx_vendor_id)
+                      ? 'bg-success-bg border-l-2 border-l-success-text'
+                      : losers.has(v.rfx_vendor_id)
+                        ? 'bg-danger-bg border-l-2 border-l-danger-text'
+                        : ''
+                    return (
+                      <td
+                        key={v.rfx_vendor_id}
+                        onClick={() => cell && setSelected({ row, vendor: v, cell })}
+                        className={`px-4 py-2.5 align-top ${cell ? 'cursor-pointer' : ''} ${rankClass}`}
+                      >
+                        {cell && price != null ? (
+                          <span className="flex items-center gap-1.5">
+                            <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${confidenceDotClass(cell)}`} />
+                            <span className="text-text-primary">
+                              {cell.currency_normalized} {price}
+                            </span>
                           </span>
-                        </span>
-                      ) : v.response_status === 'pending' || v.response_status === 'extracting' ? (
-                        <span className="italic text-text-tertiary">processing…</span>
-                      ) : (
-                        <span className="text-text-tertiary">not quoted</span>
-                      )}
-                    </td>
-                  )
-                })}
-              </tr>
-            ))}
+                        ) : v.response_status === 'pending' || v.response_status === 'extracting' ? (
+                          <span className="italic text-text-tertiary">processing…</span>
+                        ) : (
+                          <span className="text-text-tertiary">not quoted</span>
+                        )}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
-      </div>
-
-      <div className="mt-3 flex items-center gap-4 text-xs text-text-secondary">
-        <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-success-text" /> confirmed
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-warning-text" /> needs review
-        </span>
-        <span>Click any price for its source and reasoning.</span>
       </div>
 
       {selected && (
