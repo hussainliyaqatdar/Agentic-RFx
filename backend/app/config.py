@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-3.8-flash"
+    gemini_model: str = "gemini-3.1-flash-lite"
     database_url: str = "sqlite:///./agentic_rfx.db"
     storage_dir: str = "./storage"
     seed_data_dir: str = str(_REPO_ROOT / "data" / "seed")
