@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnalystChatDrawer } from '../components/AnalystChatDrawer'
 import { AwardPanel } from '../components/AwardPanel'
-import { Button } from '../components/Button'
+import { Button, IconButton } from '../components/Button'
 import { ComparisonGrid } from '../components/ComparisonGrid'
-import { ChevronLeftIcon, SparkleIcon } from '../components/icons'
+import { CheckIcon, ChevronLeftIcon, PencilIcon, SparkleIcon, XIcon } from '../components/icons'
 import { RfxStatusPill } from '../components/StatusPill'
 import { VendorDetailDrawer } from '../components/VendorDetailDrawer'
 import { rfxApi, type ComparisonData, type ProposedAwardLine, type RfxDetail } from '../lib/api'
@@ -86,7 +86,7 @@ export default function RfxDetailPage() {
       </div>
 
       {tab === 'review' ? (
-        <ReviewTab rfx={rfx} />
+        <ReviewTab rfx={rfx} onUpdated={refresh} />
       ) : (
         <ResponsesTab rfx={rfx} rfxId={Number(rfxId)} onAwarded={refresh} />
       )}
@@ -94,7 +94,10 @@ export default function RfxDetailPage() {
   )
 }
 
-function ReviewTab({ rfx }: { rfx: RfxDetail }) {
+function ReviewTab({ rfx, onUpdated }: { rfx: RfxDetail; onUpdated: () => void }) {
+  const canEdit = rfx.status === 'draft'
+  const [editingId, setEditingId] = useState<number | null>(null)
+
   return (
     <div className="space-y-6">
       <section className="rounded-xl border border-border-default bg-white p-5">
@@ -129,23 +132,24 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
                 <th className="px-4 py-2.5">Spec</th>
                 <th className="px-4 py-2.5">Qty</th>
                 <th className="px-4 py-2.5">Unit</th>
+                {canEdit && <th className="px-4 py-2.5" />}
               </tr>
             </thead>
             <tbody>
               {rfx.line_items.map((li) => (
-                <tr key={li.id} className="border-b border-border-default text-text-primary last:border-0">
-                  <td className="px-4 py-2.5 font-mono text-xs">
-                    {li.sku_code.startsWith('NEW-') ? (
-                      <span className="rounded bg-warning-bg px-1.5 py-0.5 text-warning-text">new</span>
-                    ) : (
-                      li.sku_code
-                    )}
-                  </td>
-                  <td className="px-4 py-2.5">{li.description}</td>
-                  <td className="px-4 py-2.5 text-text-secondary">{formatSpec(li.spec_attributes)}</td>
-                  <td className="px-4 py-2.5">{li.quantity.toLocaleString('en-IN')}</td>
-                  <td className="px-4 py-2.5 text-text-secondary">{li.unit}</td>
-                </tr>
+                <LineItemRow
+                  key={li.id}
+                  rfxId={rfx.id}
+                  item={li}
+                  canEdit={canEdit}
+                  editing={editingId === li.id}
+                  onStartEdit={() => setEditingId(li.id)}
+                  onCancelEdit={() => setEditingId(null)}
+                  onSaved={() => {
+                    setEditingId(null)
+                    onUpdated()
+                  }}
+                />
               ))}
             </tbody>
           </table>
@@ -165,6 +169,135 @@ function ReviewTab({ rfx }: { rfx: RfxDetail }) {
         </div>
       </section>
     </div>
+  )
+}
+
+function LineItemRow({
+  rfxId,
+  item,
+  canEdit,
+  editing,
+  onStartEdit,
+  onCancelEdit,
+  onSaved,
+}: {
+  rfxId: number
+  item: RfxDetail['line_items'][number]
+  canEdit: boolean
+  editing: boolean
+  onStartEdit: () => void
+  onCancelEdit: () => void
+  onSaved: () => void
+}) {
+  const [description, setDescription] = useState(item.description)
+  const [spec, setSpec] = useState(formatSpec(item.spec_attributes))
+  const [quantity, setQuantity] = useState(String(item.quantity))
+  const [unit, setUnit] = useState(item.unit)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (editing) {
+      setDescription(item.description)
+      setSpec(formatSpec(item.spec_attributes))
+      setQuantity(String(item.quantity))
+      setUnit(item.unit)
+      setError(null)
+    }
+  }, [editing, item])
+
+  async function handleSave() {
+    setSaving(true)
+    setError(null)
+    try {
+      await rfxApi.updateLineItem(rfxId, item.id, {
+        description,
+        spec_summary: spec,
+        quantity: Number(quantity),
+        unit,
+      })
+      onSaved()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not save')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const skuCell = (
+    <td className="px-4 py-2.5 align-top font-mono text-xs">
+      {item.sku_code.startsWith('NEW-') ? (
+        <span className="rounded bg-warning-bg px-1.5 py-0.5 text-warning-text">new</span>
+      ) : (
+        item.sku_code
+      )}
+    </td>
+  )
+
+  if (!editing) {
+    return (
+      <tr className="border-b border-border-default text-text-primary last:border-0">
+        {skuCell}
+        <td className="px-4 py-2.5">{item.description}</td>
+        <td className="px-4 py-2.5 text-text-secondary">{formatSpec(item.spec_attributes)}</td>
+        <td className="px-4 py-2.5">{item.quantity.toLocaleString('en-IN')}</td>
+        <td className="px-4 py-2.5 text-text-secondary">{item.unit}</td>
+        {canEdit && (
+          <td className="px-4 py-2.5">
+            <IconButton onClick={onStartEdit} aria-label="Edit line item">
+              <PencilIcon width={14} height={14} />
+            </IconButton>
+          </td>
+        )}
+      </tr>
+    )
+  }
+
+  return (
+    <tr className="border-b border-border-default bg-bg-hover text-text-primary last:border-0">
+      {skuCell}
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={spec}
+          onChange={(e) => setSpec(e.target.value)}
+          className="w-full rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          type="number"
+          min={0}
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          className="w-24 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <input
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          className="w-20 rounded-lg border border-border-strong px-2 py-1.5 text-sm"
+        />
+      </td>
+      <td className="px-4 py-2.5 align-top">
+        <div className="flex items-center gap-1.5">
+          <IconButton onClick={handleSave} disabled={saving} aria-label="Save">
+            <CheckIcon width={14} height={14} />
+          </IconButton>
+          <IconButton onClick={onCancelEdit} disabled={saving} aria-label="Cancel">
+            <XIcon width={14} height={14} />
+          </IconButton>
+        </div>
+        {error && <p className="mt-1 text-xs text-danger-text">{error}</p>}
+      </td>
+    </tr>
   )
 }
 

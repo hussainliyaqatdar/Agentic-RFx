@@ -26,6 +26,17 @@ export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
   )
 }
 
+export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  return handle<T>(
+    await fetch(`${BASE_URL}${path}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+    path,
+  )
+}
+
 export interface RfxSummary {
   id: number
   title: string
@@ -51,6 +62,13 @@ export interface RfxLineItem {
   }
   quantity: number
   unit: string
+}
+
+export interface LineItemUpdate {
+  description?: string
+  spec_summary?: string
+  quantity?: number
+  unit?: string
 }
 
 export interface RfxQuestion {
@@ -221,4 +239,6 @@ export const rfxApi = {
     apiPost<AnalystTurnResponse>(`/rfx/${rfxId}/analyst/turn`, { session_id: sessionId, message }),
   award: (rfxId: number, awards: Record<string, number>) =>
     apiPost<{ status: string; line_items_awarded: number }>(`/rfx/${rfxId}/award`, { awards }),
+  updateLineItem: (rfxId: number, lineItemId: number, payload: LineItemUpdate) =>
+    apiPatch<RfxLineItem>(`/rfx/${rfxId}/line-items/${lineItemId}`, payload),
 }
