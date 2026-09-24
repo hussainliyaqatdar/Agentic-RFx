@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import { rfxApi, type RfxDraft } from '../lib/api'
+import { useEffect, useRef, useState } from 'react'
+import { rfxApi, type CopilotMessage, type RfxDraft } from '../lib/api'
 import { Button, IconButton } from './Button'
 import { SendIcon, SparkleIcon, XIcon } from './icons'
-
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-}
 
 interface Props {
   onClose: () => void
   onFinalized: (rfxId: number) => void
+}
+
+const GREETING: CopilotMessage = {
+  role: 'assistant',
+  content: "Tell me what you need to source, and I'll draft the RFx as we go - line items, questionnaire, and terms.",
 }
 
 const STARTER_PROMPTS = [
@@ -19,10 +19,11 @@ const STARTER_PROMPTS = [
   'Add 500 units of a heavy-duty 9-ply export carton, 700x600x600mm - we don’t carry this yet.',
 ]
 
+const MAX_TEXTAREA_HEIGHT = 160
+
 export function CopilotDrawer({ onClose, onFinalized }: Props) {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Tell me what you need to source, and I'll draft the RFx as we go - line items, questionnaire, and terms." },
-  ])
+  const [resuming, setResuming] = useState(true)
+  const [messages, setMessages] = useState<CopilotMessage[]>([GREETING])
   const [draft, setDraft] = useState<RfxDraft | null>(null)
   const [sessionId, setSessionId] = useState<number | null>(null)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
@@ -30,6 +31,44 @@ export function CopilotDrawer({ onClose, onFinalized }: Props) {
   const [sending, setSending] = useState(false)
   const [finalizing, setFinalizing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    rfxApi
+      .latestCopilotSession()
+      .then((resumed) => {
+        if (resumed && resumed.messages.length > 0) {
+          setSessionId(resumed.session_id)
+          setMessages(resumed.messages)
+          setDraft(resumed.draft)
+          setReadyToFinalize(resumed.ready_to_finalize)
+        }
+      })
+      .catch(() => {
+        // Best-effort - fall back to a fresh conversation on any error.
+      })
+      .finally(() => setResuming(false))
+  }, [])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ block: 'end' })
+  }, [messages, resuming])
+
+  useEffect(() => {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight, MAX_TEXTAREA_HEIGHT)}px`
+  }, [input])
+
+  function startNewConversation() {
+    setSessionId(null)
+    setMessages([GREETING])
+    setDraft(null)
+    setReadyToFinalize(false)
+    setError(null)
+  }
 
   async function send(message: string) {
     if (!message.trim() || sending) return
@@ -73,31 +112,45 @@ export function CopilotDrawer({ onClose, onFinalized }: Props) {
             <SparkleIcon className="text-brand-blue" />
             <span className="font-semibold text-text-primary">Agentic RFx co-pilot</span>
           </div>
-          <IconButton onClick={onClose} aria-label="Close">
-            <XIcon width={16} height={16} />
-          </IconButton>
+          <div className="flex items-center gap-3">
+            {sessionId != null && (
+              <button onClick={startNewConversation} className="text-xs font-medium text-brand-blue hover:underline">
+                New conversation
+              </button>
+            )}
+            <IconButton onClick={onClose} aria-label="Close">
+              <XIcon width={16} height={16} />
+            </IconButton>
+          </div>
         </div>
 
         <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div
-                className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm ${
-                  m.role === 'user'
-                    ? 'rounded-br-sm bg-brand-blue text-white'
-                    : 'rounded-bl-sm bg-bg-hover text-text-primary'
-                }`}
-              >
-                {m.content}
-              </div>
-            </div>
-          ))}
-          {sending && (
-            <div className="flex justify-start">
-              <div className="rounded-2xl rounded-bl-sm bg-bg-hover px-3.5 py-2 text-sm text-text-tertiary">
-                Drafting…
-              </div>
-            </div>
+          {resuming ? (
+            <p className="text-sm text-text-secondary">Loading…</p>
+          ) : (
+            <>
+              {messages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div
+                    className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2 text-sm ${
+                      m.role === 'user'
+                        ? 'rounded-br-sm bg-brand-blue text-white'
+                        : 'rounded-bl-sm bg-bg-hover text-text-primary'
+                    }`}
+                  >
+                    {m.content}
+                  </div>
+                </div>
+              ))}
+              {sending && (
+                <div className="flex justify-start">
+                  <div className="rounded-2xl rounded-bl-sm bg-bg-hover px-3.5 py-2 text-sm text-text-tertiary">
+                    Drafting…
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </>
           )}
         </div>
 
@@ -116,7 +169,7 @@ export function CopilotDrawer({ onClose, onFinalized }: Props) {
           </div>
         )}
 
-        {messages.length <= 1 && (
+        {!resuming && messages.length <= 1 && (
           <div className="border-t border-border-default px-5 py-3">
             <p className="mb-2 text-xs font-medium text-text-tertiary">Try one of these</p>
             <div className="flex flex-col gap-1.5">
@@ -141,13 +194,21 @@ export function CopilotDrawer({ onClose, onFinalized }: Props) {
               {finalizing ? 'Creating RFx…' : 'Finalize & create RFx'}
             </Button>
           )}
-          <div className="flex items-center gap-2">
-            <input
+          <div className="flex items-end gap-2">
+            <textarea
+              ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && send(input)}
-              placeholder="Describe what you need…"
-              className="flex-1 rounded-lg border border-border-strong px-3 py-2 text-sm outline-none focus:border-brand-blue"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  send(input)
+                }
+              }}
+              placeholder="Describe what you need… (Shift+Enter for a new line)"
+              rows={1}
+              style={{ maxHeight: MAX_TEXTAREA_HEIGHT }}
+              className="flex-1 resize-none rounded-lg border border-border-strong px-3 py-2 text-sm outline-none focus:border-brand-blue"
             />
             <IconButton onClick={() => send(input)} disabled={sending} aria-label="Send">
               <SendIcon width={16} height={16} />

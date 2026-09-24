@@ -1,9 +1,11 @@
 from google.genai import types
+from sqlmodel import Session
 
 from app.config import get_settings
 from app.services.extraction import context as context_module
 from app.services.llm import gemini_client
 
+from . import context as copilot_context
 from .schemas import CopilotTurnOutput, RfxDraft
 
 INSTRUCTION_TEMPLATE = """You are an RFx drafting co-pilot for a procurement buyer. The buyer describes what \
@@ -28,6 +30,14 @@ never just what changed in this message - the draft you return replaces whatever
 or leaving fields empty. Keep the reply short and conversational, like a colleague, not a form.
 6. Only set ready_to_finalize to true once the draft has at least one line item and the terms a buyer \
 would actually need before sending this to vendors (payment terms, delivery terms, validity).
+7. If the buyer says something like "the usual", "same as always", or "our regular order", default to \
+the MOST FREQUENTLY ORDERED SKUs list below instead of asking them to re-list every item - but still \
+confirm or ask for quantities, since those change order to order even when the SKUs don't.
+8. Use the USE-CASE TIER groupings below to judge which catalog items actually fit what the buyer is \
+describing - light e-commerce fulfilment, general purpose, heavy industrial/warehouse supply chain, or \
+export quality. A spec-adjacent SKU from the wrong tier is still a wrong match. If their request could \
+plausibly fit more than one tier with meaningfully different items and they haven't said which applies, \
+ask before picking rather than guessing.
 
 {reference_context}
 """
@@ -38,11 +48,19 @@ def build_instruction(reference_context: str) -> str:
 
 
 def run_copilot_turn(
-    history: list[dict], current_draft: RfxDraft | None, user_message: str, label: str = "copilot"
+    session: Session,
+    history: list[dict],
+    current_draft: RfxDraft | None,
+    user_message: str,
+    label: str = "copilot",
 ) -> CopilotTurnOutput:
     settings = get_settings()
-    bundle = context_module.load_reference_bundle()
+    bundle = context_module.load_reference_bundle(line_items_file="sku_catalog.json")
     reference_context = context_module.format_reference_context(bundle)
+    reference_context += "\n\n" + copilot_context.format_tier_context(bundle["line_items"])
+    ordering_context = copilot_context.format_ordering_context(session)
+    if ordering_context:
+        reference_context += "\n\n" + ordering_context
 
     contents = []
     for turn in history:

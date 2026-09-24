@@ -142,6 +142,18 @@ export interface CopilotTurnResponse {
   ready_to_finalize: boolean
 }
 
+export interface CopilotMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export interface LatestCopilotSession {
+  session_id: number
+  messages: CopilotMessage[]
+  draft: RfxDraft
+  ready_to_finalize: boolean
+}
+
 export interface ComparisonVendorColumn {
   rfx_vendor_id: number
   vendor_id: number
@@ -237,6 +249,7 @@ export const rfxApi = {
   send: (id: number) => apiPost<{ status: string; vendor_count: number }>(`/rfx/${id}/send`),
   copilotTurn: (sessionId: number | null, message: string) =>
     apiPost<CopilotTurnResponse>('/copilot/turn', { session_id: sessionId, message }),
+  latestCopilotSession: () => apiGet<LatestCopilotSession | null>('/copilot/sessions/latest'),
   finalize: (sessionId: number) => apiPost<{ rfx_id: number }>(`/copilot/${sessionId}/finalize`),
   extract: (id: number) => apiPost<{ vendors_processed: number; detail: unknown[] }>(`/rfx/${id}/extract`),
   comparison: (id: number) => apiGet<ComparisonData>(`/rfx/${id}/comparison`),
