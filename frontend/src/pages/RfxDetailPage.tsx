@@ -562,7 +562,7 @@ function ResponsesTab({
                 className="flex items-center gap-2 rounded-lg border border-border-default bg-white px-4 py-2.5 text-sm text-text-primary hover:bg-bg-hover"
               >
                 <SparkleIcon width={16} height={16} className="text-brand-blue" />
-                Ask the analyst chat about these responses
+                Ask RFx Analyst
               </button>
               {rfx.status !== 'awarded' && (
                 <Button onClick={() => { setAwardPrefill(null); setAwardOpen(true) }}>

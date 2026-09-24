@@ -243,6 +243,11 @@ export interface AnalystTurnResponse {
   computed_total: ComputedTotal | null
 }
 
+export interface LatestAnalystSession {
+  session_id: number
+  messages: CopilotMessage[]
+}
+
 export const rfxApi = {
   list: () => apiGet<RfxSummary[]>('/rfx'),
   get: (id: number) => apiGet<RfxDetail>(`/rfx/${id}`),
@@ -257,6 +262,7 @@ export const rfxApi = {
   documentDownloadUrl: (rfxId: number, documentId: number) => `${BASE_URL}/rfx/${rfxId}/documents/${documentId}/download`,
   analystTurn: (rfxId: number, sessionId: number | null, message: string) =>
     apiPost<AnalystTurnResponse>(`/rfx/${rfxId}/analyst/turn`, { session_id: sessionId, message }),
+  latestAnalystSession: (rfxId: number) => apiGet<LatestAnalystSession | null>(`/rfx/${rfxId}/analyst/sessions/latest`),
   award: (rfxId: number, awards: Record<string, number>) =>
     apiPost<{ status: string; line_items_awarded: number }>(`/rfx/${rfxId}/award`, { awards }),
   updateLineItem: (rfxId: number, lineItemId: number, payload: LineItemUpdate) =>
